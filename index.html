@@ -102,10 +102,8 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
 .readout b{font:400 12px/1.2 var(--f-mono);color:var(--fg)}
 .readout b.red{color:var(--signal)}
 .legend{position:fixed;z-index:5;right:max(28px, env(safe-area-inset-right,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 22px);display:grid;gap:8px;justify-items:end;pointer-events:none;max-width:min(560px,46vw)}
-.legend ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;pointer-events:auto}
 button.tag{cursor:pointer;transition:opacity .15s,border-color .15s,color .15s}
 button.tag:hover{border-color:var(--fg-72);color:var(--fg)}
-.filtering > li > button.tag,.filtering > button.tag{opacity:.4}
 button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)}
 .tag.hash::before,.chip.hash::before{content:"#";color:var(--signal)}
 .tag.hash{gap:2px}
@@ -274,7 +272,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   <div><span class="lab">Nearest</span><b class="red" id="nearR">—</b></div>
   <div><span class="lab">Mode</span><b id="modeR">Drift</b></div>
 </div>
-<div class="legend" aria-label="Kinds of work"><ul id="legend"></ul><span class="lab" id="hintR">Drag · steer  /  Scroll · move  /  Space · overview</span></div>
+<div class="legend"><span class="lab" id="hintR">Drag · steer  /  Scroll · move  /  Space · overview</span></div>
 
 <div class="empty" id="empty" hidden></div>
 
@@ -542,7 +540,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
     || (activeTags.size && !tagsOf(p).some(t => activeTags.has(t))) || (onlyNew && !isNew(p));
   const filterCount = () => (activeProg?1:0) + activeMedia.size + activeTags.size + (onlyNew?1:0);
   function clearFilters(){ activeProg = null; activeMedia.clear(); activeTags.clear(); onlyNew = false; refreshFilters(); }
-  function refreshFilters(){ renderMajors(); renderLegend(); }
+  function refreshFilters(){ renderMajors(); }
   function toggleIn(set, v){ set.has(v) ? set.delete(v) : set.add(v); refreshFilters(); }
 
   /* ---------- input ---------- */
@@ -890,7 +888,6 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   function closeAll(){ openPanel(null); }
   document.querySelectorAll('[data-close]').forEach(b => b.onclick = closeAll);
   function el(tag, attrs={}, text){ const e=document.createElement(tag); for(const k in attrs) e.setAttribute(k, attrs[k]); if(text!=null) e.textContent=text; return e; }
-  function tagBtn(text, color){ const t = el('button',{class:'tag',type:'button'}); const i = el('i'); i.style.setProperty('--c', color); t.append(i, document.createTextNode(text)); return t; }
   function tagEl(text, color, bubble){ const t = el('span',{class:'tag'+(bubble?' bub':'')}); const i = el('i'); i.style.setProperty('--c', color); t.append(i, document.createTextNode(text)); return t; }
 
   function openDetail(p){
@@ -956,12 +953,6 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
     else if(dataState==='error'){ e.replaceChildren(el('p',{class:'big'},'Could not reach the archive.'), el('p',{class:'note'}, staticMode ? 'projects.json could not be loaded. Serve this folder from a web server (GitHub Pages works); opening index.html directly from your computer blocks it.' : 'Check your connection and reload the page.')); e.hidden=false; }
     else e.hidden = true;
   }
-  function renderLegend(){ const lg = $('#legend'); lg.replaceChildren(); lg.classList.toggle('filtering', activeMedia.size>0 || onlyNew);
-    const add = (label, color, pressed, onclick) => { const li = el('li'); const b = tagBtn(label, color); b.setAttribute('aria-pressed', String(pressed));
-      b.title = pressed ? 'Stop highlighting ' + label : 'Highlight ' + label; b.onclick = onclick; li.append(b); lg.append(li); };
-    for(const m in MEDIA) add(m, MEDIA[m], activeMedia.has(m), () => toggleIn(activeMedia, m));
-    add('New', 'var(--signal)', onlyNew, () => { onlyNew = !onlyNew; refreshFilters(); }); }
-  renderLegend();
   renderEmpty(); renderMajors();
 
   let toastT; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600); }
