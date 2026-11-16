@@ -30,6 +30,7 @@ Each project is one entry in `projects.json`:
   "maker": "Mira Okafor",
   "programme": "Ceramics & Glass",
   "media": "Image",
+  "tags": ["material", "installation", "storytelling"],
   "year": "2026",
   "description": "A few sentences about the project.",
   "link": "https://example.com",
@@ -40,6 +41,7 @@ Each project is one entry in `projects.json`:
 
 - **programme** is the major. Known majors get their own bubble colour; any new name is given one automatically.
 - **media** is one of: `Image`, `Drawing (DXF)`, `Sheet (MDF)`, `3D model`, `Code`, `Video`, `Sound`, `Text`.
+- **tags** is an optional list of short lowercase words. Pick from the ones already used or make up your own. Tags show up under **Overview → Index → Tags** for filtering, and they drive the **Related in orbit** list on each project (together with words shared between descriptions, plus the medium and major).
 - **image** is optional. Without one, the project gets a generated preview in the style of its medium. For a video, use `"video": "images/film.mp4"` instead.
 - **createdAt** is a timestamp in milliseconds. Projects from the last 7 days are marked as new.
 

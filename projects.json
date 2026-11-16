@@ -5,6 +5,11 @@
     "maker": "Mira Okafor",
     "programme": "Ceramics & Glass",
     "media": "Image",
+    "tags": [
+      "material",
+      "installation",
+      "storytelling"
+    ],
     "year": "2025",
     "description": "Glazed porcelain shards fired at different temperatures and arranged by the altitude band each fragment stands in for. A garden of things that will never come down.",
     "link": "",
@@ -23,6 +28,11 @@
     "maker": "Hana Sato",
     "programme": "Textiles",
     "media": "Image",
+    "tags": [
+      "data",
+      "material",
+      "mapping"
+    ],
     "year": "2026",
     "description": "A lace pattern knitted from the tracked positions of 400 objects over one night, read off as stitch density.",
     "link": "",
@@ -41,6 +51,11 @@
     "maker": "Tomás Rivera",
     "programme": "Information Experience Design",
     "media": "Code",
+    "tags": [
+      "data",
+      "sound",
+      "interactive"
+    ],
     "year": "2026",
     "description": "A small script that takes public orbital data and plays each object's decay as a falling tone. The longer it stays up, the lower it sings.",
     "link": "",
@@ -59,6 +74,10 @@
     "maker": "Ines Duarte",
     "programme": "Design Products",
     "media": "Drawing (DXF)",
+    "tags": [
+      "reuse",
+      "product"
+    ],
     "year": "2024",
     "description": "Cut files for a rocket nose-cone fairing redrawn as a flat-pack storage box. Every curve is kept, every bolt hole becomes a hinge.",
     "link": "",
@@ -77,6 +96,11 @@
     "maker": "Oscar Lind",
     "programme": "Design Products",
     "media": "Sheet (MDF)",
+    "tags": [
+      "reuse",
+      "product",
+      "sustainability"
+    ],
     "year": "2025",
     "description": "An 18 mm MDF stool cut from offcuts of three other projects. The legs splay at the angle a capsule meets the atmosphere.",
     "link": "",
@@ -95,6 +119,11 @@
     "maker": "Priya Nair",
     "programme": "Information Experience Design",
     "media": "Code",
+    "tags": [
+      "data",
+      "mapping",
+      "interactive"
+    ],
     "year": "2026",
     "description": "A live sketch that draws one dot for every catalogued object and lets you switch off the ones still working. Most of the sky stays lit.",
     "link": "",
@@ -113,6 +142,10 @@
     "maker": "Lukas Brandt",
     "programme": "Sculpture",
     "media": "3D model",
+    "tags": [
+      "material",
+      "installation"
+    ],
     "year": "2024",
     "description": "A scanned upper stage reduced to a low-poly shell and printed at 1:50, then left outside for a month to weather.",
     "link": "",
@@ -131,6 +164,10 @@
     "maker": "Amara Mensah",
     "programme": "Architecture",
     "media": "Drawing (DXF)",
+    "tags": [
+      "speculative",
+      "sustainability"
+    ],
     "year": "2024",
     "description": "Plans for a station built 300 km above geostationary orbit, where old satellites are parked to die. Who designs the cemetery?",
     "link": "",
@@ -149,6 +186,10 @@
     "maker": "Chloé Martin",
     "programme": "Fashion",
     "media": "Image",
+    "tags": [
+      "body",
+      "material"
+    ],
     "year": "2024",
     "description": "Outerwear built from heat-shield logic: layers meant to char and flake away so the wearer stays intact.",
     "link": "",
@@ -167,6 +208,10 @@
     "maker": "Jae-won Park",
     "programme": "Digital Direction",
     "media": "Video",
+    "tags": [
+      "storytelling",
+      "data"
+    ],
     "year": "2026",
     "description": "A three-minute film assembled from frames that dropped out of a satellite feed. The gaps are the story.",
     "link": "",
@@ -185,6 +230,10 @@
     "maker": "Noor Haddad",
     "programme": "Information Experience Design",
     "media": "Sound",
+    "tags": [
+      "sound",
+      "storytelling"
+    ],
     "year": "2024",
     "description": "Recordings of radio beacons from satellites that have been dead for decades but still transmit when sunlight hits their panels.",
     "link": "",
@@ -203,6 +252,10 @@
     "maker": "Ellis Grant",
     "programme": "Writing",
     "media": "Text",
+    "tags": [
+      "speculative",
+      "storytelling"
+    ],
     "year": "2025",
     "description": "A fictional operations manual for a single person whose only job is to keep two pieces of junk from touching. Forty pages, no plot.",
     "link": "",
@@ -221,6 +274,10 @@
     "maker": "Ruth Abebe",
     "programme": "Interior Design",
     "media": "Sheet (MDF)",
+    "tags": [
+      "material",
+      "product"
+    ],
     "year": "2024",
     "description": "Perforated MDF wall panels patterned after Whipple shields, the thin layers that break up debris before it reaches a hull.",
     "link": "",
@@ -239,6 +296,11 @@
     "maker": "Felix Okoro",
     "programme": "Visual Communication",
     "media": "Image",
+    "tags": [
+      "mapping",
+      "storytelling",
+      "sustainability"
+    ],
     "year": "2025",
     "description": "A poster series about the spacecraft cemetery in the South Pacific, the place on Earth furthest from any land.",
     "link": "",
@@ -257,6 +319,10 @@
     "maker": "Sofia Lindqvist",
     "programme": "Jewellery & Metal",
     "media": "3D model",
+    "tags": [
+      "body",
+      "material"
+    ],
     "year": "2025",
     "description": "Rings modelled on failed space tether experiments. Each one is a knot that should have held.",
     "link": "",
@@ -275,6 +341,11 @@
     "maker": "Arjun Mehta",
     "programme": "Innovation Design Engineering",
     "media": "Code",
+    "tags": [
+      "interactive",
+      "data",
+      "sustainability"
+    ],
     "year": "2024",
     "description": "A collision simulation you can run in the browser. Add one more satellite and watch the chain reaction start.",
     "link": "",
@@ -293,6 +364,10 @@
     "maker": "Bea Laurent",
     "programme": "Print",
     "media": "Image",
+    "tags": [
+      "data",
+      "storytelling"
+    ],
     "year": "2024",
     "description": "Risograph prints listing every launch from one year, sorted by what is still up there.",
     "link": "",
@@ -311,6 +386,10 @@
     "maker": "Wen Zhao",
     "programme": "Industrial Design Engineering",
     "media": "Drawing (DXF)",
+    "tags": [
+      "product",
+      "sustainability"
+    ],
     "year": "2025",
     "description": "A folding sail that deploys at end of life to pull a small satellite down faster. Drawings, fold tests and a 1:1 prototype.",
     "link": "",
@@ -329,6 +408,10 @@
     "maker": "Leo Fischer",
     "programme": "Graphic Design & Art Direction",
     "media": "Text",
+    "tags": [
+      "data",
+      "mapping"
+    ],
     "year": "2024",
     "description": "A type specimen where letter weight follows debris density at each altitude. The heaviest weight sits at 800 km.",
     "link": "",
@@ -347,6 +430,11 @@
     "maker": "Yara Costa",
     "programme": "Architecture",
     "media": "3D model",
+    "tags": [
+      "body",
+      "installation",
+      "speculative"
+    ],
     "year": "2024",
     "description": "A room the size of a return capsule, modelled for one person to spend an hour in. Most visitors leave early.",
     "link": "",
@@ -365,6 +453,10 @@
     "maker": "Daniel Osei",
     "programme": "Painting",
     "media": "Image",
+    "tags": [
+      "material",
+      "storytelling"
+    ],
     "year": "2026",
     "description": "Large canvases about a fleck of paint small enough to crack a shuttle window. Mostly empty, slightly scratched.",
     "link": "",
@@ -383,6 +475,10 @@
     "maker": "Isla McKenna",
     "programme": "Photography",
     "media": "Video",
+    "tags": [
+      "storytelling",
+      "installation"
+    ],
     "year": "2024",
     "description": "Long exposures of the night sky over London, cut into a loop where satellites trace the same lines again and again.",
     "link": "",
@@ -401,6 +497,11 @@
     "maker": "Marco Bianchi",
     "programme": "Design Products",
     "media": "Sheet (MDF)",
+    "tags": [
+      "reuse",
+      "product",
+      "interactive"
+    ],
     "year": "2024",
     "description": "A lamp made of laser-cut MDF rings that you stack in any order. No two assemblies give the same shadow.",
     "link": "",
@@ -419,6 +520,10 @@
     "maker": "Aiko Tanaka",
     "programme": "Information Experience Design",
     "media": "Sound",
+    "tags": [
+      "sound",
+      "data"
+    ],
     "year": "2025",
     "description": "A drone piece built from the data rate of one weather satellite across a single orbit.",
     "link": "",

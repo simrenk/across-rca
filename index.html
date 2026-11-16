@@ -86,6 +86,15 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
 .mrow:hover{color:var(--fg)}
 .mlist.filtering .mrow{opacity:.4}
 .mlist.filtering .mrow[aria-pressed="true"]{opacity:1;color:var(--fg)}
+.mrow i.sq{width:9px;height:9px;border-radius:0;justify-self:center}
+.mrow i.hash{width:auto;height:auto;background:none;border-radius:0;color:var(--signal);font-style:normal;justify-self:center}
+.itabs{display:flex;border-bottom:1px solid var(--fg-12)}
+.itab{flex:1;padding:8px 0 9px;font:400 10px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--fg-48);border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s}
+.itab:hover{color:var(--fg)}
+.itab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--signal)}
+.itab sup{color:var(--signal);font-size:9px;margin-left:3px}
+.itabs + .mlist{border-top:0}
+.clear{font:400 10px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--signal);justify-self:start;padding:2px 0;border-bottom:1px solid currentColor}
 
 /* bottom readout */
 .readout{position:fixed;z-index:5;left:max(28px, env(safe-area-inset-left,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 22px);display:flex;pointer-events:none;font-variant-numeric:tabular-nums}
@@ -93,7 +102,19 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
 .readout b{font:400 12px/1.2 var(--f-mono);color:var(--fg)}
 .readout b.red{color:var(--signal)}
 .legend{position:fixed;z-index:5;right:max(28px, env(safe-area-inset-right,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 22px);display:grid;gap:8px;justify-items:end;pointer-events:none;max-width:min(560px,46vw)}
-.legend ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}
+.legend ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;pointer-events:auto}
+button.tag{cursor:pointer;transition:opacity .15s,border-color .15s,color .15s}
+button.tag:hover{border-color:var(--fg-72);color:var(--fg)}
+.filtering > li > button.tag,.filtering > button.tag{opacity:.4}
+button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)}
+.tag.hash::before,.chip.hash::before{content:"#";color:var(--signal)}
+.tag.hash{gap:2px}
+.chip.hash{gap:2px;cursor:pointer}
+.chip.hash:hover{color:var(--fg)}
+.chip.hash[aria-pressed="true"]{background:rgba(255,255,255,.06)}
+.chip .x{margin-left:6px;color:var(--fg-48)}
+.rel-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:6px;padding-top:16px;border-top:1px solid rgba(255,255,255,.10)}
+.row small.why{white-space:normal;text-align:right;max-width:16ch;line-height:1.5}
 
 /* tags: boxed, square swatch */
 .tags{display:flex;gap:8px;flex-wrap:wrap}
@@ -110,8 +131,15 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
 .glass::after{content:"";position:absolute;z-index:-1;width:80%;aspect-ratio:1;right:-26%;top:-22%;border-radius:50%;background:var(--orb,transparent);filter:blur(56px);opacity:.42;pointer-events:none}
 .panel{position:fixed;z-index:10;top:calc(env(safe-area-inset-top,0px) + 76px);right:max(24px, env(safe-area-inset-right,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 24px);
-  width:min(440px, calc(100% - 48px));display:flex;flex-direction:column;opacity:0;transform:translateX(24px);pointer-events:none;transition:opacity .3s,transform .4s cubic-bezier(.2,.8,.2,1)}
+  width:min(440px, calc(100% - 48px));display:flex;flex-direction:column;opacity:0;transform:translateX(48px) scale(.98);transform-origin:right center;pointer-events:none;transition:opacity .45s ease,transform .7s cubic-bezier(.16,1,.3,1)}
 .panel.open{opacity:1;transform:none;pointer-events:auto}
+.panel.open .panel-body > *{animation:rise .6s cubic-bezier(.16,1,.3,1) both}
+.panel.open .panel-body > :nth-child(2){animation-delay:.05s}
+.panel.open .panel-body > :nth-child(3){animation-delay:.1s}
+.panel.open .panel-body > :nth-child(4){animation-delay:.15s}
+.panel.open .panel-body > :nth-child(n+5){animation-delay:.2s}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){ .panel,.panel.open .panel-body > *{transition:none;animation:none} }
 .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;border-bottom:1px solid rgba(255,255,255,.10)}
 .panel-body{overflow-y:auto;padding:22px;display:grid;gap:18px;align-content:start;min-height:0;flex:1;scrollbar-width:thin;scrollbar-color:var(--fg-24) transparent}
 .close{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;color:var(--fg-48);padding:4px 0}
@@ -199,8 +227,13 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
 <section class="majors" aria-label="Index of majors">
   <div class="eyebrow"><b>01</b> Index</div>
   <div class="total">
-    <div><span class="lab">Projects</span><strong id="totP">0</strong></div>
+    <div><span class="lab" id="totPL">Projects</span><strong id="totP">0</strong></div>
     <div><span class="lab">Majors</span><strong id="totM">0</strong></div>
+  </div>
+  <div class="itabs" role="tablist" aria-label="Filter the index by">
+    <button class="itab" role="tab" type="button" data-tab="majors" aria-selected="true">Majors</button>
+    <button class="itab" role="tab" type="button" data-tab="media" aria-selected="false">Medium</button>
+    <button class="itab" role="tab" type="button" data-tab="tags" aria-selected="false">Tags</button>
   </div>
   <ul class="mlist" id="mlist"></ul>
   <div id="mtools" style="display:grid;gap:8px"></div>
@@ -241,6 +274,10 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
       </div>
     </div>
     <datalist id="progs"></datalist>
+    <div class="field"><label for="fTag">Tags · pick up to 6, or add your own</label>
+      <div class="chips" id="fTagChips" style="padding-top:6px"></div>
+      <input id="fTag" maxlength="30" placeholder="Type a tag and press Enter" autocomplete="off">
+    </div>
     <div class="field"><label for="fDesc">What it is</label><textarea id="fDesc" maxlength="1500" placeholder="A few sentences on the project and how it relates to debris, orbit, waste or what we leave behind."></textarea></div>
     <div class="field"><label for="fLink">Link</label><input id="fLink" type="url" maxlength="300" placeholder="https://"></div>
     <p class="err" id="fErr" role="alert"></p>
@@ -265,6 +302,12 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
   const cam = {x:0,y:0,z:0,yaw:0,pitch:0,speed:CRUISE,targetSpeed:CRUISE};
   let drift = true, wanderYaw = 0, wanderPitch = 0, wanderT = 0, flyTo = null;
   let selectedId = null, activeProg = null, modeSwitchAt = -10;
+  /* filters: majors / mediums / tags combine with AND; several picks inside one group match any of them */
+  const activeMedia = new Set(), activeTags = new Set(); let onlyNew = false, indexTab = 'majors';
+  const normTag = s => String(s||'').trim().toLowerCase().replace(/^#+/,'').replace(/[,\s]+/g,' ').trim().slice(0,30);
+  const tagsOf = p => Array.isArray(p.tags) ? [...new Set(p.tags.map(normTag).filter(Boolean))] : [];
+  /* starter vocabulary for the launch form; tags already used in the archive are added to it */
+  const BASE_TAGS = ['sustainability','data','material','speculative','body','sound','mapping','reuse','installation','interactive','product','storytelling','research','wearable'];
 
   const COL = {w:'244,244,242', signal:'255,42,31', sodium:'242,182,50', patina:'93,142,158', cobalt:'47,98,255'};
 
@@ -421,6 +464,15 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
   }
   const RTILT = -0.12; // ring plane tilt (around z)
   let ovT = 0;
+  /* overview focus: when a project opens, the orbit eases to a slow turn, swings that project to the front and zooms in a little;
+     closing eases back. Any drag or scroll hands the camera back to the viewer. */
+  let ovSpin = 1, ovPad = 0, ovFocus = 0, ovAuto = null, ovReturn = null, selAt = 0;
+  const ease = (cur, to, dt, rate) => cur + (to - cur)*Math.min(1, dt*rate);
+  const angDiff = (a, b) => ((a - b + Math.PI*3) % (Math.PI*2)) - Math.PI;
+  function ovWorld(p){ const o = p.ov, bob = Math.sin(ovT*.55 + o.ph);
+    if(o.ring){ const rot = ovT*.035, cr = Math.cos(rot), sr = Math.sin(rot), y = o.y + bob*.07; return tiltPt(o.x*cr - o.z*sr, y, o.x*sr + o.z*cr); }
+    return tiltPt(o.x + Math.cos(ovT*.3 + o.ph)*.06, o.y + bob*.1, o.z + Math.sin(ovT*.35 + o.ph)*.06); }
+  function releaseOv(){ ovAuto = null; ovReturn = null; }
   function ovProj(x,y,z, f, cxp, cyp){
     // tilt ring frame, then camera yaw/pitch
     const cyw=Math.cos(ovCam.yaw), syw=Math.sin(ovCam.yaw), cpt=Math.cos(ovCam.pitch), spt=Math.sin(ovCam.pitch);
@@ -457,7 +509,12 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
   const trunc = (s,n) => (s||'').length > n ? s.slice(0,n-1)+'…' : (s||'');
   const coord = p => `[${Math.round(p.pos.x+SPACE/2)},${Math.round(p.pos.z+SPACE/2)}]`;
   const isNew = p => p.createdAt && (Date.now() - p.createdAt) < 7*864e5;
-  const dimmed = p => activeProg && progName(p) !== activeProg;
+  const dimmed = p => (activeProg && progName(p) !== activeProg) || (activeMedia.size && !activeMedia.has(p.media))
+    || (activeTags.size && !tagsOf(p).some(t => activeTags.has(t))) || (onlyNew && !isNew(p));
+  const filterCount = () => (activeProg?1:0) + activeMedia.size + activeTags.size + (onlyNew?1:0);
+  function clearFilters(){ activeProg = null; activeMedia.clear(); activeTags.clear(); onlyNew = false; refreshFilters(); }
+  function refreshFilters(){ renderMajors(); renderLegend(); }
+  function toggleIn(set, v){ set.has(v) ? set.delete(v) : set.add(v); refreshFilters(); }
 
   /* ---------- input ---------- */
   let drag = null, hover = null, lastScreen = [];
@@ -472,9 +529,9 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
   cv.addEventListener('pointermove', e => {
     if(ptrs.has(e.pointerId)) ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
     if(pinch && ptrs.size === 2){ const [p1,p2] = [...ptrs.values()]; const d = Math.hypot(p1.x-p2.x,p1.y-p2.y);
-      if(!drift) ovCam.dist = Math.max(3.2, Math.min(22, pinch.dist * pinch.d / Math.max(20,d))); return; }
+      if(!drift){ releaseOv(); ovCam.dist = Math.max(3.2, Math.min(22, pinch.dist * pinch.d / Math.max(20,d))); } return; }
     if(drag){ const dx=e.clientX-drag.x, dy=e.clientY-drag.y; drag.moved=Math.max(drag.moved,Math.hypot(dx,dy));
-      if(!drift){ ovCam.yaw = drag.oy + dx*0.006; ovCam.pitch = Math.max(-1.35, Math.min(1.35, drag.op + dy*0.006)); return; }
+      if(!drift){ if(drag.moved > 4) releaseOv(); ovCam.yaw = drag.oy + dx*0.006; ovCam.pitch = Math.max(-1.35, Math.min(1.35, drag.op + dy*0.006)); return; }
       if(selectedId) return;
       cam.yaw = drag.yaw - dx*0.0035; cam.pitch = clampP(drag.pitch + dy*0.0035); flyTo = null; }
     else { hover = pick(e.clientX,e.clientY); cv.classList.toggle('over', !!hover); }
@@ -484,7 +541,7 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
     if(click){ const p = pick(e.clientX,e.clientY); if(p) openDetail(p); } });
   cv.addEventListener('pointercancel', e => { endPtr(e); drag=null; cv.classList.remove('dragging'); });
   cv.addEventListener('wheel', e => { e.preventDefault();
-    if(!drift){ ovCam.dist = Math.max(3.2, Math.min(22, ovCam.dist * Math.exp(e.deltaY*0.0012))); return; }
+    if(!drift){ releaseOv(); ovCam.dist = Math.max(3.2, Math.min(22, ovCam.dist * Math.exp(e.deltaY*0.0012))); return; }
     if(selectedId) return; cam.targetSpeed = Math.max(-500, Math.min(900, cam.targetSpeed - e.deltaY*1.2)); flyTo=null; }, {passive:false});
   const keys = {};
   addEventListener('keydown', e => { if(e.target.closest('input,textarea,select')) { if(e.key==='Escape') closeAll(); return; }
@@ -543,7 +600,16 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
       if(keys['s']||keys['arrowdown']) ovCam.pitch = Math.max(-1.35, ovCam.pitch - dt);
       if(keys['=']||keys['+']) ovCam.dist = Math.max(3.2, ovCam.dist*(1-dt));
       if(keys['-']||keys['_']) ovCam.dist = Math.min(22, ovCam.dist*(1+dt));
-      if(!selectedId && !reduce) ovT += dt;
+      const sel = selectedId ? projects.find(p => p.id === selectedId) : null;
+      ovSpin = ease(ovSpin, sel ? .12 : 1, dt, 2.2); if(!reduce) ovT += dt*ovSpin;
+      ovFocus = ease(ovFocus, sel ? 1 : 0, dt, 3);
+      ovPad = ease(ovPad, (W > 900 && document.querySelector('.panel.open')) ? Math.min(460, W*.32) : 0, dt, reduce ? 60 : 4.5);
+      const r8 = reduce ? 60 : 2.4;
+      if(sel && ovAuto){ const w = ovWorld(sel);
+        ovCam.yaw += angDiff(Math.atan2(-w[0], -w[2]) + .32, ovCam.yaw) * Math.min(1, dt*r8);
+        ovCam.pitch = ease(ovCam.pitch, .26, dt, r8); ovCam.dist = ease(ovCam.dist, ovAuto.dist, dt, r8); }
+      else if(!sel && ovReturn){ ovCam.dist = ease(ovCam.dist, ovReturn.dist, dt, r8); ovCam.pitch = ease(ovCam.pitch, ovReturn.pitch, dt, r8);
+        if(Math.abs(ovCam.dist - ovReturn.dist) < .01) ovReturn = null; }
       drawOverview();
     }
     const since = (now - modeSwitchAt)/1000;
@@ -624,8 +690,9 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
     if(p.img && r > 6){ cx.clip(); cx.globalAlpha = fog*.92; const iw=p.img.naturalWidth||p.img.width, ih=p.img.naturalHeight||p.img.height, s=Math.max(2*r/iw, 2*r/ih);
       cx.drawImage(p.img, sx-iw*s/2, sy-ih*s/2, iw*s, ih*s); cx.globalAlpha = 1; }
     cx.restore();
-    cx.lineWidth = sel ? 4 : (hot ? 1.6 : 1); cx.strokeStyle = `rgba(${COL.w},${sel ? 1 : fog*.9})`; cx.beginPath(); cx.arc(sx,sy,r,0,6.283); cx.stroke();
-    if(sel){ cx.lineWidth = 1; cx.strokeStyle = `rgba(${COL.w},.9)`; cx.beginPath(); cx.arc(sx,sy,r*1.48+4,0,6.283); cx.stroke(); }
+    const sk = sel ? (reduce ? 1 : 1 - Math.pow(1 - Math.min(1, (performance.now() - selAt)/650), 3)) : 0;
+    cx.lineWidth = sel ? 1 + 3*sk : (hot ? 1.6 : 1); cx.strokeStyle = `rgba(${COL.w},${sel ? fog*.9 + (1-fog*.9)*sk : fog*.9})`; cx.beginPath(); cx.arc(sx,sy,r,0,6.283); cx.stroke();
+    if(sel){ cx.lineWidth = 1; cx.strokeStyle = `rgba(${COL.w},${.9*sk})`; cx.beginPath(); cx.arc(sx,sy,(r*1.48+4)*(1 + (1-sk)*1.8),0,6.283); cx.stroke(); }
     if(red){ cx.fillStyle = `rgba(${COL.signal},${fog})`; cx.beginPath(); cx.arc(sx-r*1.05, sy-r*1.05, Math.max(3,r*.09), 0, 6.283); cx.fill(); }
     // label
     if((full && (r > 9)) || hot || sel || (!full && activeProg && !dimmed(p))){
@@ -647,7 +714,7 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
   /* ---------- overview (drift off): everything at once, static ---------- */
   function drawOverview(){
     cx.fillStyle = '#000'; cx.fillRect(0,0,W,H);
-    const left = W > 900 ? 300 : 0, rightPad = (W > 900 && document.querySelector('.panel.open')) ? Math.min(460, W*.32) : 0;
+    const left = W > 900 ? 300 : 0, rightPad = ovPad;
     const ccx = left + (W - left - rightPad)/2, ccy = H*.52;
     const span = Math.min((W - left - rightPad)*.46, H*.8);
     const f = span*9.5/RING*.84;
@@ -668,14 +735,12 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
     ringLine(true);
     for(const [q,a,sz] of back){ if(behind(q)) continue; cx.fillStyle = `rgba(${COL.w},${a*.55})`; cx.fillRect(q[0],q[1],sz,sz); }
     // projects behind the planet
-    const items = projects.map(p => { const o = p.ov, bob = Math.sin(ovT*.55 + o.ph);
-      const q = o.ring ? PR(o.x, o.y + bob*.07, o.z)
-                       : P(o.x + Math.cos(ovT*.3 + o.ph)*.06, o.y + bob*.1, o.z + Math.sin(ovT*.35 + o.ph)*.06);
+    const items = projects.map(p => { const q = ovProj(...ovWorld(p), f, ccx, ccy);
       return q ? {p,q} : null; }).filter(Boolean).sort((a,b)=>b.q[2]-a.q[2]);
     lastScreen = [];
     const base = Math.max(8, Math.min(16, span*.03));
     const drawItem = (it) => { const r = base * it.q[3] / (f/ovCam.dist) ; const hid = behind(it.q);
-      let fog = hid ? .22 : 1; if(dimmed(it.p)) fog *= .2;
+      let fog = hid ? .22 : 1; if(dimmed(it.p)) fog *= .2; if(selectedId !== it.p.id) fog *= 1 - .5*ovFocus;
       drawBody(it.p, it.q[0], it.q[1], Math.min(34, r), fog, 0, hover===it.p, selectedId===it.p.id, false);
       if(!hid) lastScreen.push({p:it.p, x:it.q[0], y:it.q[1], r:Math.min(34,r)*1.5, z:it.q[2]}); };
     for(const it of items) if(it.q[2] > 0) drawItem(it);
@@ -705,25 +770,78 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
   }
   requestAnimationFrame(frame);
 
-  /* ---------- majors index ---------- */
+  /* ---------- index: majors / medium / tags ---------- */
+  document.querySelectorAll('.itab').forEach(b => b.onclick = () => { indexTab = b.dataset.tab; renderMajors(); });
+  const pad2 = n => String(n).padStart(2,'0');
   function renderMajors(){
-    const counts = {}; for(const p of projects){ const g = progName(p); counts[g] = (counts[g]||0)+1; }
-    const names = Object.keys(counts).sort((a,b)=>counts[b]-counts[a] || a.localeCompare(b));
-    $('#totP').textContent = String(projects.length).padStart(2,'0');
-    $('#totM').textContent = String(names.length).padStart(2,'0');
+    const counts = {}, mcounts = {}, tcounts = {};
+    for(const p of projects){ const g = progName(p); counts[g] = (counts[g]||0)+1;
+      if(p.media) mcounts[p.media] = (mcounts[p.media]||0)+1;
+      for(const t of tagsOf(p)) tcounts[t] = (tcounts[t]||0)+1; }
+    const byCount = c => Object.keys(c).sort((a,b)=>c[b]-c[a] || a.localeCompare(b));
+    const names = byCount(counts);
     if(activeProg && !counts[activeProg]) activeProg = null;
-    const ul = $('#mlist'); ul.replaceChildren(); ul.classList.toggle('filtering', !!activeProg);
-    for(const g of names){
-      const li = el('li'); const b = el('button',{class:'mrow',type:'button','aria-pressed':String(g===activeProg),title: g===activeProg ? 'Show all majors' : 'Highlight '+g});
-      const i = el('i'); i.style.setProperty('--c', bubbleCss(g)); if(bubbleTurn(g)) i.style.transform = 'rotate(180deg)';
-      b.append(i, el('span',{},g), el('small',{},String(counts[g]).padStart(2,'0')));
-      b.onclick = () => { activeProg = activeProg===g ? null : g; renderMajors(); };
-      li.append(b); ul.append(li);
+    const n = filterCount(), shown = n ? projects.filter(p=>!dimmed(p)).length : projects.length;
+    $('#totP').textContent = pad2(shown); $('#totPL').textContent = n ? 'Matching' : 'Projects';
+    $('#totM').textContent = pad2(names.length);
+    const active = {majors: activeProg?1:0, media: activeMedia.size, tags: activeTags.size};
+    for(const b of document.querySelectorAll('.itab')){ const k = b.dataset.tab, on = k===indexTab; b.setAttribute('aria-selected', String(on));
+      b.replaceChildren(document.createTextNode(b.dataset.tab==='media' ? 'Medium' : k[0].toUpperCase()+k.slice(1))); if(active[k]) b.append(el('sup',{},String(active[k]))); }
+    const ul = $('#mlist'); ul.replaceChildren(); ul.classList.toggle('filtering', !!active[indexTab]);
+    const row = (icon, label, count, pressed, onclick, title) => { const li = el('li');
+      const b = el('button',{class:'mrow',type:'button','aria-pressed':String(pressed),title}); b.append(icon, el('span',{},label), el('small',{},pad2(count)));
+      b.onclick = onclick; li.append(b); ul.append(li); };
+    if(indexTab==='majors'){
+      for(const g of names){ const i = el('i'); i.style.setProperty('--c', bubbleCss(g)); if(bubbleTurn(g)) i.style.transform = 'rotate(180deg)';
+        row(i, g, counts[g], g===activeProg, () => { activeProg = activeProg===g ? null : g; refreshFilters(); }, g===activeProg ? 'Show all majors' : 'Highlight '+g); }
+      if(!names.length) ul.append(el('li',{class:'note',style:'padding:10px 0'}, dataState==='ready' ? 'No majors yet.' : 'Loading majors…'));
+    } else if(indexTab==='media'){
+      for(const m of Object.keys(MEDIA)){ const i = el('i',{class:'sq'}); i.style.setProperty('--c', MEDIA[m]);
+        row(i, m, mcounts[m]||0, activeMedia.has(m), () => toggleIn(activeMedia, m), 'Highlight '+m); }
+      const i = el('i',{class:'sq'}); i.style.setProperty('--c','var(--signal)');
+      row(i, 'New this week', projects.filter(isNew).length, onlyNew, () => { onlyNew = !onlyNew; refreshFilters(); }, 'Projects added in the last 7 days');
+    } else {
+      const tags = byCount(tcounts);
+      for(const t of tags) row(el('i',{class:'hash'},'#'), t, tcounts[t], activeTags.has(t), () => toggleIn(activeTags, t), 'Highlight #'+t);
+      if(!tags.length) ul.append(el('li',{class:'note',style:'padding:10px 0'}, 'No tags yet. Add some when you launch a project.'));
     }
-    const mt = $('#mtools'); mt.replaceChildren(); const exs = projects.filter(p=>p.example);
-    if(exs.length){ mt.append(el('p',{class:'note'}, `// ${exs.length} example projects are placeholders.`));
- }
-    if(!names.length) ul.append(el('li',{class:'note',style:'padding:10px 0'}, dataState==='ready' ? 'No majors yet.' : 'Loading majors…'));
+    const mt = $('#mtools'); mt.replaceChildren();
+    if(n){ const c = el('button',{class:'clear',type:'button'}, `Clear ${n} filter${n>1?'s':''}`); c.onclick = clearFilters; mt.append(c); }
+    const exs = projects.filter(p=>p.example);
+    if(exs.length) mt.append(el('p',{class:'note'}, `// ${exs.length} example projects are placeholders.`));
+  }
+
+  /* ---------- related projects ----------
+     Score = shared tags (rarer tags count more) + TF-IDF cosine similarity of title and description
+     + small bonuses for the same medium or major. Runs in the browser, no server needed. */
+  const STOP = new Set('a an the and or of to in on at by for from with as is are was were be been it its this that these those than then into over under one two three each every who what when where which while there their they them you your we our not no so but if out up down off only most more all any can will would should could just same like about after before most some such very still also has have had made make'.split(' '));
+  const stem = w => w.length > 4 ? w.replace(/(ing|ed|es|s)$/,'') : w;
+  const words = p => ((p.title||'') + ' ' + (p.description||'')).toLowerCase().match(/[a-z][a-z-]+/g)?.map(stem).filter(w => w.length > 2 && !STOP.has(w)) || [];
+  let relIndex = null, relFor = null;
+  function buildRel(){
+    const N = projects.length, df = {}, tdf = {};
+    const docs = projects.map(p => { const tf = {}; for(const w of words(p)) tf[w] = (tf[w]||0)+1; for(const w in tf) df[w] = (df[w]||0)+1;
+      const tg = tagsOf(p); for(const t of tg) tdf[t] = (tdf[t]||0)+1; return {p, tf, tg}; });
+    for(const d of docs){ const v = {}; let nn = 0; for(const w in d.tf){ if(df[w] < 2) continue; const x = (1+Math.log(d.tf[w])) * Math.log(N/df[w]); if(x > 0){ v[w] = x; nn += x*x; } }
+      d.v = v; d.norm = Math.sqrt(nn) || 1; }
+    relIndex = {docs, idfTag: t => Math.log(1 + N/(tdf[t]||1))}; relFor = projects;
+  }
+  function related(p, k){
+    if(relFor !== projects || !relIndex) buildRel();
+    const {docs, idfTag} = relIndex, me = docs.find(d => d.p === p); if(!me) return [];
+    const out = [];
+    for(const d of docs){ if(d === me) continue;
+      const shared = me.tg.filter(t => d.tg.includes(t));
+      let dot = 0; const terms = []; for(const w in me.v) if(d.v[w]){ const c = me.v[w]*d.v[w]; dot += c; terms.push([w,c]); }
+      const cos = dot / (me.norm * d.norm);
+      const sameMedia = p.media && d.p.media === p.media, sameMajor = progName(d.p) === progName(p);
+      const score = shared.reduce((a,t)=>a+idfTag(t),0) + cos*4 + (sameMedia?.35:0) + (sameMajor?.35:0);
+      if(score < .5) continue;
+      terms.sort((a,b)=>b[1]-a[1]);
+      const why = shared.length ? shared.map(t=>'#'+t).join(' ') : terms.length && cos > .05 ? 'mentions ' + terms.slice(0,2).map(x=>x[0]).join(', ') : sameMedia ? 'also ' + p.media : 'same major';
+      out.push({p: d.p, score, why});
+    }
+    return out.sort((a,b)=>b.score-a.score).slice(0,k);
   }
 
   /* ---------- panels ---------- */
@@ -732,10 +850,13 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
   function closeAll(){ openPanel(null); }
   document.querySelectorAll('[data-close]').forEach(b => b.onclick = closeAll);
   function el(tag, attrs={}, text){ const e=document.createElement(tag); for(const k in attrs) e.setAttribute(k, attrs[k]); if(text!=null) e.textContent=text; return e; }
+  function tagBtn(text, color){ const t = el('button',{class:'tag',type:'button'}); const i = el('i'); i.style.setProperty('--c', color); t.append(i, document.createTextNode(text)); return t; }
   function tagEl(text, color, bubble){ const t = el('span',{class:'tag'+(bubble?' bub':'')}); const i = el('i'); i.style.setProperty('--c', color); t.append(i, document.createTextNode(text)); return t; }
 
   function openDetail(p){
     if(drift) flyToProject(p);
+    else { if(!ovReturn) ovReturn = {dist: ovCam.dist, pitch: ovCam.pitch}; ovAuto = {dist: Math.max(6.4, Math.min(ovReturn.dist, 9.5)*.78)}; }
+    if(selectedId !== p.id) selAt = performance.now();
     selectedId = p.id;
     const g = progName(p);
     $('#detail').style.setProperty('--orb', bubbleCss(g));
@@ -758,6 +879,12 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
     add('Added', p.createdAt ? new Date(p.createdAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '');
     b.append(dl);
     if(p.description) b.append(el('p',{class:'p-desc'}, p.description));
+    const own = tagsOf(p);
+    if(own.length){ const ht = el('div',{class:'tags'});
+      for(const t of own){ const x = el('button',{class:'tag hash',type:'button','aria-pressed':String(activeTags.has(t)),title:'Highlight everything tagged #'+t}, t);
+        x.onclick = () => { toggleIn(activeTags, t); x.setAttribute('aria-pressed', String(activeTags.has(t))); };
+        ht.append(x); }
+      b.append(ht); }
     const acts = el('div',{class:'p-actions'});
     if(p.assetId && !isImg(p) && !/^video\//.test(p.assetType||'')) acts.append(el('a',{class:'btn solid',href:'/_blob/'+p.assetId,target:'_blank',rel:'noopener'},'Open file'));
     if(p.link && /^https?:\/\//i.test(p.link)) acts.append(el('a',{class:'btn'+(acts.children.length?'':' solid'),href:p.link,target:'_blank',rel:'noopener'},'Open link'));
@@ -767,6 +894,16 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
         del.disabled = true; try{ await db.collection('projects').doc(p.id).delete(); closeAll(); toast('Removed from orbit'); } catch(e){ del.disabled=false; del.textContent='Could not remove. Try again'; } };
       acts.append(del); }
     if(acts.children.length) b.append(acts);
+    const rel = related(p, 4);
+    if(rel.length){
+      const h = el('div',{class:'rel-h'}); h.append(el('span',{class:'lab'},'Related in orbit'), el('span',{class:'note'},'by tags + description'));
+      const ul = el('ul',{class:'rows'});
+      for(const r of rel){ const q = r.p, li = el('li'), btn = el('button',{class:'row',type:'button'});
+        const i = el('i'); i.style.setProperty('--c', bubbleCss(progName(q)));
+        btn.append(i, el('b',{}, q.title||'Untitled'), el('small',{class:'why'}, r.why));
+        btn.onclick = () => openDetail(q); li.append(btn); ul.append(li); }
+      b.append(h, ul); }
+    b.scrollTop = 0;
     openPanel('detail'); selectedId = p.id;
   }
 
@@ -779,7 +916,12 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
     else if(dataState==='error'){ e.replaceChildren(el('p',{class:'big'},'Could not reach the archive.'), el('p',{class:'note'}, staticMode ? 'projects.json could not be loaded. Serve this folder from a web server (GitHub Pages works); opening index.html directly from your computer blocks it.' : 'Check your connection and reload the page.')); e.hidden=false; }
     else e.hidden = true;
   }
-  { const lg = $('#legend'); for(const m in MEDIA) lg.append(tagEl(m, MEDIA[m])); lg.append(tagEl('New','var(--signal)')); }
+  function renderLegend(){ const lg = $('#legend'); lg.replaceChildren(); lg.classList.toggle('filtering', activeMedia.size>0 || onlyNew);
+    const add = (label, color, pressed, onclick) => { const li = el('li'); const b = tagBtn(label, color); b.setAttribute('aria-pressed', String(pressed));
+      b.title = pressed ? 'Stop highlighting ' + label : 'Highlight ' + label; b.onclick = onclick; li.append(b); lg.append(li); };
+    for(const m in MEDIA) add(m, MEDIA[m], activeMedia.has(m), () => toggleIn(activeMedia, m));
+    add('New', 'var(--signal)', onlyNew, () => { onlyNew = !onlyNew; refreshFilters(); }); }
+  renderLegend();
   renderEmpty(); renderMajors();
 
   let toastT; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600); }
@@ -787,8 +929,23 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
   /* ---------- upload ---------- */
   let pickedBlob = null;
   function openUpload(){ if(!db && !staticMode){ toast('Archive still loading'); return; }
-    $('#fErr').textContent=''; openPanel('upload'); setTimeout(()=>$('#fTitle').focus(), 300); }
+    $('#fErr').textContent=''; renderTagPicker(); openPanel('upload'); setTimeout(()=>$('#fTitle').focus(), 300); }
   $('#addBtn').onclick = openUpload;
+  const pickedTags = new Set(); const MAXT = 6;
+  function renderTagPicker(){
+    const used = {}; for(const p of projects) for(const t of tagsOf(p)) used[t] = (used[t]||0)+1;
+    const base = [...new Set([...Object.keys(used).sort((a,b)=>used[b]-used[a]), ...BASE_TAGS])].slice(0, 24);
+    const pool = [...base, ...[...pickedTags].filter(t => !base.includes(t))];
+    const box = $('#fTagChips'); box.replaceChildren();
+    for(const t of pool){ const on = pickedTags.has(t); const c = el('button',{class:'chip hash',type:'button','aria-pressed':String(on)}, t);
+      c.onclick = () => { if(on) pickedTags.delete(t); else if(pickedTags.size >= MAXT){ toast('Up to ' + MAXT + ' tags'); return; } else pickedTags.add(t); renderTagPicker(); };
+      box.append(c); }
+  }
+  $('#fTag').addEventListener('keydown', e => { if(e.key !== 'Enter' && e.key !== ',') return; e.preventDefault();
+    const t = normTag(e.target.value); if(!t) return;
+    if(!pickedTags.has(t) && pickedTags.size >= MAXT){ toast('Up to ' + MAXT + ' tags'); return; }
+    pickedTags.add(t); e.target.value = ''; renderTagPicker(); });
+  const takeTyped = () => { const t = normTag($('#fTag').value); if(t && pickedTags.size < MAXT) pickedTags.add(t); $('#fTag').value=''; };
   const drop = $('#drop'), fileIn = $('#file');
   drop.onclick = () => fileIn.click();
   drop.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); fileIn.click(); } };
@@ -826,9 +983,10 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
     const title = v('#fTitle'), maker = v('#fMaker');
     if(!title || !maker){ $('#fErr').textContent = 'Add a project title and who made it.'; (title?$('#fMaker'):$('#fTitle')).focus(); return; }
     const link = v('#fLink'); if(link && !/^https?:\/\//i.test(link)){ $('#fErr').textContent = 'The link needs to start with https://'; $('#fLink').focus(); return; }
+    takeTyped(); const tags = [...pickedTags];
     if(staticMode){
       const slug = title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40) || 'project';
-      const entry = { id: slug + '-' + Date.now().toString(36), title, maker, year:v('#fYear'), programme:v('#fProg'), media:$('#fMedia').value,
+      const entry = { id: slug + '-' + Date.now().toString(36), title, maker, year:v('#fYear'), programme:v('#fProg'), media:$('#fMedia').value, tags,
         description:v('#fDesc'), link, image: pickedBlob ? 'images/' + slug + '.jpg' : '', createdAt: Date.now() };
       showEntry(entry, !!pickedBlob); return;
     }
@@ -837,9 +995,9 @@ body.overview .majors{display:flex;animation:fadein .4s ease}
       let assetId = null, assetType = null;
       if(pickedBlob){ if(!assets) throw {code:'no_assets'}; const up = await assets.upload(pickedBlob); assetId = up.id; assetType = up.contentType || pickedBlob.type || null; }
       const pos = {x:(Math.random()-.5)*SPACE, y:(Math.random()-.5)*SPACE*.35, z:(Math.random()-.5)*SPACE};
-      const ref = await db.collection('projects').add({ title, maker, year:v('#fYear'), programme:v('#fProg'), media:$('#fMedia').value, assetType,
+      const ref = await db.collection('projects').add({ title, maker, year:v('#fYear'), programme:v('#fProg'), media:$('#fMedia').value, assetType, tags,
         description:v('#fDesc'), link, assetId, pos, createdBy: myId||null, createdAt: Date.now() });
-      $('#form').reset(); pickedBlob = null; resetDrop();
+      $('#form').reset(); pickedBlob = null; resetDrop(); pickedTags.clear();
       closeAll(); toast('Launched · flying to it');
       setTimeout(()=>{ const p = projects.find(x=>x.id===ref.id); if(p) openDetail(p); }, 500);
     }catch(err){ const c = err && err.code;
