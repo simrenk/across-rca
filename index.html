@@ -210,6 +210,34 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   .p-title{font-size:30px}
 }
 @media (prefers-reduced-motion:reduce){ .panel,.toast{transition:none} }
+.btn{white-space:nowrap}
+.idx-btn,.idx-close{display:none}
+/* phones: compact top bar, index + filters live in a bottom sheet opened from the Index button */
+@media (max-width:640px){
+  .mark{font-size:22px}
+  .toggle{gap:8px}
+  .toggle[aria-pressed="true"] .opt[data-opt="overview"],.toggle[aria-pressed="false"] .opt[data-opt="drift"]{display:none}
+  .nav .btn{padding:9px 12px;font-size:10px}
+  .top{padding-top:calc(env(safe-area-inset-top,0px) + 14px)}
+  .readout div{padding:0 16px 0 10px}
+  .readout div:nth-child(n+2){display:none}
+  .idx-btn{display:inline-flex;position:fixed;z-index:5;right:max(16px, env(safe-area-inset-right,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 22px);
+    background:rgba(0,0,0,.55);padding:10px 12px;font-size:10px}
+  .idx-btn sup{color:var(--signal);margin-left:2px}
+  body.idx-open .idx-btn{display:none}
+  body.idx-open .majors{display:flex;position:fixed;z-index:11;top:auto;left:max(12px, env(safe-area-inset-left,0px));right:max(12px, env(safe-area-inset-right,0px));
+    bottom:calc(env(safe-area-inset-bottom,0px) + 12px);width:auto;max-height:min(56dvh, 520px);box-sizing:border-box;padding:18px 18px 16px;gap:12px;
+    background:rgba(8,8,12,.88);border:1px solid rgba(255,255,255,.12);border-radius:18px;
+    backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);animation:sheetup .45s cubic-bezier(.16,1,.3,1)}
+  body.idx-open .readout{display:none}
+  .idx-close{display:inline;margin-left:auto}
+  .total strong{font-size:30px}
+  .mrow{padding:10px 4px 10px 0;font-size:11px}
+  .itab{padding:10px 0 11px}
+  .panel{height:min(64dvh, 600px);transform:translateY(40px)}
+  .p-img{aspect-ratio:16/10}
+}
+@keyframes sheetup{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -224,8 +252,8 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   </nav>
 </header>
 
-<section class="majors" aria-label="Index of majors">
-  <div class="eyebrow"><b>01</b> Index</div>
+<section class="majors" id="majors" aria-label="Index and filters">
+  <div class="eyebrow"><b>01</b> Index<button class="close idx-close" type="button" id="idxClose" aria-label="Close index">Close ×</button></div>
   <div class="total">
     <div><span class="lab" id="totPL">Projects</span><strong id="totP">0</strong></div>
     <div><span class="lab">Majors</span><strong id="totM">0</strong></div>
@@ -239,6 +267,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   <div id="mtools" style="display:grid;gap:8px"></div>
 </section>
 
+<button class="btn idx-btn" type="button" id="idxBtn" aria-controls="majors">Index · Filter</button>
 <div class="readout" aria-hidden="true">
   <div><span class="lab">Pos</span><b id="posR">0, 0, 0</b></div>
   <div><span class="lab" id="velL">Vel</span><b id="velR">0.0 u/s</b></div>
@@ -466,7 +495,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   let ovT = 0;
   /* overview focus: when a project opens, the orbit eases to a slow turn, swings that project to the front and zooms in a little;
      closing eases back. Any drag or scroll hands the camera back to the viewer. */
-  let ovSpin = 1, ovPad = 0, ovFocus = 0, ovAuto = null, ovReturn = null, selAt = 0;
+  let ovPadB = 0, ovSpin = 1, ovPad = 0, ovFocus = 0, ovAuto = null, ovReturn = null, selAt = 0;
   const ease = (cur, to, dt, rate) => cur + (to - cur)*Math.min(1, dt*rate);
   const angDiff = (a, b) => ((a - b + Math.PI*3) % (Math.PI*2)) - Math.PI;
   function ovWorld(p){ const o = p.ov, bob = Math.sin(ovT*.55 + o.ph);
@@ -521,6 +550,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   const clampP = p => Math.max(-1.2, Math.min(1.2, p));
   const ptrs = new Map(); let pinch = null;
   cv.addEventListener('pointerdown', e => {
+    if(document.body.classList.contains('idx-open')) setIdx(false);
     ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY}); cv.setPointerCapture(e.pointerId);
     if(ptrs.size === 2){ const [p1,p2] = [...ptrs.values()]; pinch = {d:Math.hypot(p1.x-p2.x,p1.y-p2.y), dist:ovCam.dist}; drag = null; return; }
     drag = {x:e.clientX,y:e.clientY,yaw:cam.yaw,pitch:cam.pitch,oy:ovCam.yaw,op:ovCam.pitch,moved:0};
@@ -545,7 +575,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
     if(selectedId) return; cam.targetSpeed = Math.max(-500, Math.min(900, cam.targetSpeed - e.deltaY*1.2)); flyTo=null; }, {passive:false});
   const keys = {};
   addEventListener('keydown', e => { if(e.target.closest('input,textarea,select')) { if(e.key==='Escape') closeAll(); return; }
-    keys[e.key.toLowerCase()] = true; if(e.key===' '){ e.preventDefault(); setDrift(!drift); } if(e.key==='Escape') closeAll(); });
+    keys[e.key.toLowerCase()] = true; if(e.key===' '){ e.preventDefault(); setDrift(!drift); } if(e.key==='Escape'){ closeAll(); setIdx(false); } });
   addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
   function pick(mx,my){ let best=null, bd=1e9; for(const s of lastScreen){ const d=Math.hypot(mx-s.x,my-s.y); if(d < Math.max(14,s.r*1.3) && s.z < bd){ best=s.p; bd=s.z; } } return best; }
 
@@ -562,6 +592,9 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
 
   function nearestImage(p){ return {x: cam.x + wrap(p.pos.x-cam.x, SPACE), y: cam.y + wrap(p.pos.y-cam.y, SPACE*.6), z: cam.z + wrap(p.pos.z-cam.z, SPACE)}; }
   function flyToProject(p){ flyTo = {p, stop: 520 + p.size*5}; cam.targetSpeed = 0; }
+  /* height of whatever bottom sheet covers the canvas on phones (project, launch or index) */
+  const sheetH = () => { if(W > 640) return 0; const p = document.querySelector('.panel.open') || (document.body.classList.contains('idx-open') && $('#majors'));
+    return p ? p.offsetHeight + 12 : 0; };
   const panelShift = () => (W > 900 && document.querySelector('.panel.open')) ? Math.atan((Math.min(440,W*.3)/2 + 12)/F) : 0;
 
   /* ---------- loop ---------- */
@@ -579,7 +612,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
       }
       if(flyTo){
         const t = nearestImage(flyTo.p); const dx=t.x-cam.x, dy=t.y-cam.y, dz=t.z-cam.z, d=Math.hypot(dx,dy,dz)||1;
-        const ty = Math.atan2(dx,dz) + panelShift(), tp = clampP(Math.asin(dy/d));
+        const ty = Math.atan2(dx,dz) + panelShift(), tp = clampP(Math.asin(dy/d) - Math.atan((sheetH()/2)/F));
         const dyaw = ((ty - cam.yaw + Math.PI*3) % (Math.PI*2)) - Math.PI;
         cam.yaw += dyaw*Math.min(1,dt*4); cam.pitch += (tp-cam.pitch)*Math.min(1,dt*4);
         cam.targetSpeed = Math.max(0, Math.min(1800, (d - flyTo.stop)*2.4));
@@ -604,6 +637,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
       ovSpin = ease(ovSpin, sel ? .12 : 1, dt, 2.2); if(!reduce) ovT += dt*ovSpin;
       ovFocus = ease(ovFocus, sel ? 1 : 0, dt, 3);
       ovPad = ease(ovPad, (W > 900 && document.querySelector('.panel.open')) ? Math.min(460, W*.32) : 0, dt, reduce ? 60 : 4.5);
+      ovPadB = ease(ovPadB, sheetH(), dt, reduce ? 60 : 4.5);
       const r8 = reduce ? 60 : 2.4;
       if(sel && ovAuto){ const w = ovWorld(sel);
         ovCam.yaw += angDiff(Math.atan2(-w[0], -w[2]) + .32, ovCam.yaw) * Math.min(1, dt*r8);
@@ -707,7 +741,9 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
       cx.font = '400 9px "Geist Mono", ui-monospace, monospace';
       cx.fillStyle = `rgba(${mc},${fog})`; const mtxt = (p.media||'').toUpperCase(); cx.fillText(mtxt, lx+18, ly+36);
       const mw = cx.measureText(mtxt+'   ').width; cx.fillStyle = `rgba(${COL.w},${fog*.5})`;
-      cx.fillText(trunc(g.toUpperCase() + (p.example?'  ·  EXAMPLE':''), 46), lx+18+mw, ly+36);
+      let sub = trunc(g.toUpperCase() + (p.example?'  ·  EXAMPLE':''), 46); const room = W - 12 - (lx+18+mw);
+      while(sub.length > 4 && cx.measureText(sub).width > room) sub = sub.slice(0, -2).trimEnd() + '…';
+      cx.fillText(sub, lx+18+mw, ly+36);
     }
   }
 
@@ -715,8 +751,8 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   function drawOverview(){
     cx.fillStyle = '#000'; cx.fillRect(0,0,W,H);
     const left = W > 900 ? 300 : 0, rightPad = ovPad;
-    const ccx = left + (W - left - rightPad)/2, ccy = H*.52;
-    const span = Math.min((W - left - rightPad)*.46, H*.8);
+    const avH = H - ovPadB, ccx = left + (W - left - rightPad)/2, ccy = ovPadB ? 56 + Math.max(avH - 56, 120)/2 : H*.52;
+    const span = Math.min((W - left - rightPad)*.46, (avH - (ovPadB ? 56 : 0))*.8);
     const f = span*9.5/RING*.84;
     const P = (x,y,z) => ovProj(...tiltPt(x,y,z), f, ccx, ccy);
     const rot = ovT*.035, cr = Math.cos(rot), sr = Math.sin(rot);
@@ -755,7 +791,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
     for(const it of items) if(it.q[2] <= 0) drawItem(it);
     nearest = null;
     cx.font = '400 10px "Geist Mono", ui-monospace, monospace'; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.fillStyle = `rgba(${COL.w},.45)`;
-    cx.fillText(`${projects.length} OBJECTS IN ORBIT  ·  DRAG TO ROTATE  ·  SCROLL TO ZOOM  ·  CLICK TO OPEN`, ccx, H - 120);
+    if(ovPadB < 20) cx.fillText(W < 640 ? `${projects.length} IN ORBIT  ·  DRAG  ·  PINCH  ·  TAP TO OPEN` : `${projects.length} OBJECTS IN ORBIT  ·  DRAG TO ROTATE  ·  SCROLL TO ZOOM  ·  CLICK TO OPEN`, ccx, H - (W < 640 ? 96 : 120));
   }
 
   function hud(){
@@ -805,6 +841,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
       for(const t of tags) row(el('i',{class:'hash'},'#'), t, tcounts[t], activeTags.has(t), () => toggleIn(activeTags, t), 'Highlight #'+t);
       if(!tags.length) ul.append(el('li',{class:'note',style:'padding:10px 0'}, 'No tags yet. Add some when you launch a project.'));
     }
+    const ib = $('#idxBtn'); ib.replaceChildren(document.createTextNode('Index · Filter')); if(n) ib.append(el('sup',{},String(n)));
     const mt = $('#mtools'); mt.replaceChildren();
     if(n){ const c = el('button',{class:'clear',type:'button'}, `Clear ${n} filter${n>1?'s':''}`); c.onclick = clearFilters; mt.append(c); }
     const exs = projects.filter(p=>p.example);
@@ -845,7 +882,10 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   }
 
   /* ---------- panels ---------- */
-  function openPanel(id){ for(const e of document.querySelectorAll('.panel')){ const on = e.id===id; e.classList.toggle('open', on); e.setAttribute('aria-hidden', !on); }
+  const setIdx = on => { document.body.classList.toggle('idx-open', on); $('#idxBtn').setAttribute('aria-expanded', String(on)); };
+  $('#idxBtn').onclick = () => { closeAll(); setIdx(true); };
+  $('#idxClose').onclick = () => setIdx(false);
+  function openPanel(id){ if(id) setIdx(false); for(const e of document.querySelectorAll('.panel')){ const on = e.id===id; e.classList.toggle('open', on); e.setAttribute('aria-hidden', !on); }
     if(id!=='detail') selectedId = null; }
   function closeAll(){ openPanel(null); }
   document.querySelectorAll('[data-close]').forEach(b => b.onclick = closeAll);
@@ -855,7 +895,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
 
   function openDetail(p){
     if(drift) flyToProject(p);
-    else { if(!ovReturn) ovReturn = {dist: ovCam.dist, pitch: ovCam.pitch}; ovAuto = {dist: Math.max(6.4, Math.min(ovReturn.dist, 9.5)*.78)}; }
+    else { if(!ovReturn) ovReturn = {dist: ovCam.dist, pitch: ovCam.pitch}; ovAuto = {dist: W <= 640 ? ovReturn.dist : Math.max(6.4, Math.min(ovReturn.dist, 9.5)*.78)}; }
     if(selectedId !== p.id) selAt = performance.now();
     selectedId = p.id;
     const g = progName(p);
