@@ -1,0 +1,434 @@
+[
+  {
+    "id": "example-01",
+    "title": "Kessler Garden",
+    "maker": "Mira Okafor",
+    "programme": "Ceramics & Glass",
+    "media": "Image",
+    "year": "2025",
+    "description": "Glazed porcelain shards fired at different temperatures and arranged by the altitude band each fragment stands in for. A garden of things that will never come down.",
+    "link": "",
+    "image": "",
+    "createdAt": 1793363774583,
+    "example": true,
+    "pos": {
+      "x": 1536,
+      "y": 500,
+      "z": 1181
+    }
+  },
+  {
+    "id": "example-02",
+    "title": "Low Earth Lace",
+    "maker": "Hana Sato",
+    "programme": "Textiles",
+    "media": "Image",
+    "year": "2026",
+    "description": "A lace pattern knitted from the tracked positions of 400 objects over one night, read off as stitch density.",
+    "link": "",
+    "image": "",
+    "createdAt": 1782304574583,
+    "example": true,
+    "pos": {
+      "x": 1491,
+      "y": -434,
+      "z": 1276
+    }
+  },
+  {
+    "id": "example-03",
+    "title": "deorbit.py",
+    "maker": "Tomás Rivera",
+    "programme": "Information Experience Design",
+    "media": "Code",
+    "year": "2026",
+    "description": "A small script that takes public orbital data and plays each object's decay as a falling tone. The longer it stays up, the lower it sings.",
+    "link": "",
+    "image": "",
+    "createdAt": 1789648574583,
+    "example": true,
+    "pos": {
+      "x": 479,
+      "y": -439,
+      "z": -224
+    }
+  },
+  {
+    "id": "example-04",
+    "title": "Fairing, Flat-Pack",
+    "maker": "Ines Duarte",
+    "programme": "Design Products",
+    "media": "Drawing (DXF)",
+    "year": "2024",
+    "description": "Cut files for a rocket nose-cone fairing redrawn as a flat-pack storage box. Every curve is kept, every bolt hole becomes a hinge.",
+    "link": "",
+    "image": "",
+    "createdAt": 1779626174583,
+    "example": true,
+    "pos": {
+      "x": 163,
+      "y": 547,
+      "z": 565
+    }
+  },
+  {
+    "id": "example-05",
+    "title": "Re-entry Stool",
+    "maker": "Oscar Lind",
+    "programme": "Design Products",
+    "media": "Sheet (MDF)",
+    "year": "2025",
+    "description": "An 18 mm MDF stool cut from offcuts of three other projects. The legs splay at the angle a capsule meets the atmosphere.",
+    "link": "",
+    "image": "",
+    "createdAt": 1789302974583,
+    "example": true,
+    "pos": {
+      "x": 1952,
+      "y": 215,
+      "z": 485
+    }
+  },
+  {
+    "id": "example-06",
+    "title": "Tracking 27,000",
+    "maker": "Priya Nair",
+    "programme": "Information Experience Design",
+    "media": "Code",
+    "year": "2026",
+    "description": "A live sketch that draws one dot for every catalogued object and lets you switch off the ones still working. Most of the sky stays lit.",
+    "link": "",
+    "image": "",
+    "createdAt": 1788611774583,
+    "example": true,
+    "pos": {
+      "x": -2037,
+      "y": 40,
+      "z": -1850
+    }
+  },
+  {
+    "id": "example-07",
+    "title": "Spent Stage",
+    "maker": "Lukas Brandt",
+    "programme": "Sculpture",
+    "media": "3D model",
+    "year": "2024",
+    "description": "A scanned upper stage reduced to a low-poly shell and printed at 1:50, then left outside for a month to weather.",
+    "link": "",
+    "image": "",
+    "createdAt": 1779712574583,
+    "example": true,
+    "pos": {
+      "x": 418,
+      "y": 389,
+      "z": -730
+    }
+  },
+  {
+    "id": "example-08",
+    "title": "The Graveyard Orbit",
+    "maker": "Amara Mensah",
+    "programme": "Architecture",
+    "media": "Drawing (DXF)",
+    "year": "2024",
+    "description": "Plans for a station built 300 km above geostationary orbit, where old satellites are parked to die. Who designs the cemetery?",
+    "link": "",
+    "image": "",
+    "createdAt": 1778157374583,
+    "example": true,
+    "pos": {
+      "x": 80,
+      "y": 196,
+      "z": -1
+    }
+  },
+  {
+    "id": "example-09",
+    "title": "Ablative",
+    "maker": "Chloé Martin",
+    "programme": "Fashion",
+    "media": "Image",
+    "year": "2024",
+    "description": "Outerwear built from heat-shield logic: layers meant to char and flake away so the wearer stays intact.",
+    "link": "",
+    "image": "",
+    "createdAt": 1790944574583,
+    "example": true,
+    "pos": {
+      "x": -179,
+      "y": -311,
+      "z": 2090
+    }
+  },
+  {
+    "id": "example-10",
+    "title": "Signal Loss",
+    "maker": "Jae-won Park",
+    "programme": "Digital Direction",
+    "media": "Video",
+    "year": "2026",
+    "description": "A three-minute film assembled from frames that dropped out of a satellite feed. The gaps are the story.",
+    "link": "",
+    "image": "",
+    "createdAt": 1793622974583,
+    "example": true,
+    "pos": {
+      "x": -1033,
+      "y": 361,
+      "z": 54
+    }
+  },
+  {
+    "id": "example-11",
+    "title": "Ghost Satellites",
+    "maker": "Noor Haddad",
+    "programme": "Information Experience Design",
+    "media": "Sound",
+    "year": "2024",
+    "description": "Recordings of radio beacons from satellites that have been dead for decades but still transmit when sunlight hits their panels.",
+    "link": "",
+    "image": "",
+    "createdAt": 1786365374583,
+    "example": true,
+    "pos": {
+      "x": 265,
+      "y": -549,
+      "z": -1647
+    }
+  },
+  {
+    "id": "example-12",
+    "title": "Collision Avoidance Manual",
+    "maker": "Ellis Grant",
+    "programme": "Writing",
+    "media": "Text",
+    "year": "2025",
+    "description": "A fictional operations manual for a single person whose only job is to keep two pieces of junk from touching. Forty pages, no plot.",
+    "link": "",
+    "image": "",
+    "createdAt": 1788093374583,
+    "example": true,
+    "pos": {
+      "x": -1819,
+      "y": -676,
+      "z": 777
+    }
+  },
+  {
+    "id": "example-13",
+    "title": "Shield Panels",
+    "maker": "Ruth Abebe",
+    "programme": "Interior Design",
+    "media": "Sheet (MDF)",
+    "year": "2024",
+    "description": "Perforated MDF wall panels patterned after Whipple shields, the thin layers that break up debris before it reaches a hull.",
+    "link": "",
+    "image": "",
+    "createdAt": 1784032574583,
+    "example": true,
+    "pos": {
+      "x": 1794,
+      "y": -627,
+      "z": -523
+    }
+  },
+  {
+    "id": "example-14",
+    "title": "Point Nemo",
+    "maker": "Felix Okoro",
+    "programme": "Visual Communication",
+    "media": "Image",
+    "year": "2025",
+    "description": "A poster series about the spacecraft cemetery in the South Pacific, the place on Earth furthest from any land.",
+    "link": "",
+    "image": "",
+    "createdAt": 1786797374583,
+    "example": true,
+    "pos": {
+      "x": -1793,
+      "y": 181,
+      "z": 1170
+    }
+  },
+  {
+    "id": "example-15",
+    "title": "Tether Knots",
+    "maker": "Sofia Lindqvist",
+    "programme": "Jewellery & Metal",
+    "media": "3D model",
+    "year": "2025",
+    "description": "Rings modelled on failed space tether experiments. Each one is a knot that should have held.",
+    "link": "",
+    "image": "",
+    "createdAt": 1790166974583,
+    "example": true,
+    "pos": {
+      "x": -1734,
+      "y": -234,
+      "z": 1949
+    }
+  },
+  {
+    "id": "example-16",
+    "title": "Kessler Cascade",
+    "maker": "Arjun Mehta",
+    "programme": "Innovation Design Engineering",
+    "media": "Code",
+    "year": "2024",
+    "description": "A collision simulation you can run in the browser. Add one more satellite and watch the chain reaction start.",
+    "link": "",
+    "image": "",
+    "createdAt": 1793363774583,
+    "example": true,
+    "pos": {
+      "x": -1065,
+      "y": -559,
+      "z": -1848
+    }
+  },
+  {
+    "id": "example-17",
+    "title": "Orbital Census",
+    "maker": "Bea Laurent",
+    "programme": "Print",
+    "media": "Image",
+    "year": "2024",
+    "description": "Risograph prints listing every launch from one year, sorted by what is still up there.",
+    "link": "",
+    "image": "",
+    "createdAt": 1789907774583,
+    "example": true,
+    "pos": {
+      "x": 765,
+      "y": -436,
+      "z": 37
+    }
+  },
+  {
+    "id": "example-18",
+    "title": "Drag Sail",
+    "maker": "Wen Zhao",
+    "programme": "Industrial Design Engineering",
+    "media": "Drawing (DXF)",
+    "year": "2025",
+    "description": "A folding sail that deploys at end of life to pull a small satellite down faster. Drawings, fold tests and a 1:1 prototype.",
+    "link": "",
+    "image": "",
+    "createdAt": 1788093374583,
+    "example": true,
+    "pos": {
+      "x": 604,
+      "y": -537,
+      "z": -333
+    }
+  },
+  {
+    "id": "example-19",
+    "title": "Fragments per km³",
+    "maker": "Leo Fischer",
+    "programme": "Graphic Design & Art Direction",
+    "media": "Text",
+    "year": "2024",
+    "description": "A type specimen where letter weight follows debris density at each altitude. The heaviest weight sits at 800 km.",
+    "link": "",
+    "image": "",
+    "createdAt": 1786106174583,
+    "example": true,
+    "pos": {
+      "x": -967,
+      "y": 659,
+      "z": 1274
+    }
+  },
+  {
+    "id": "example-20",
+    "title": "Return Capsule Room",
+    "maker": "Yara Costa",
+    "programme": "Architecture",
+    "media": "3D model",
+    "year": "2024",
+    "description": "A room the size of a return capsule, modelled for one person to spend an hour in. Most visitors leave early.",
+    "link": "",
+    "image": "",
+    "createdAt": 1778589374583,
+    "example": true,
+    "pos": {
+      "x": -1215,
+      "y": -148,
+      "z": 1488
+    }
+  },
+  {
+    "id": "example-21",
+    "title": "Paint Fleck",
+    "maker": "Daniel Osei",
+    "programme": "Painting",
+    "media": "Image",
+    "year": "2026",
+    "description": "Large canvases about a fleck of paint small enough to crack a shuttle window. Mostly empty, slightly scratched.",
+    "link": "",
+    "image": "",
+    "createdAt": 1787056574583,
+    "example": true,
+    "pos": {
+      "x": -1679,
+      "y": 685,
+      "z": -1204
+    }
+  },
+  {
+    "id": "example-22",
+    "title": "Flyby, Loop",
+    "maker": "Isla McKenna",
+    "programme": "Photography",
+    "media": "Video",
+    "year": "2024",
+    "description": "Long exposures of the night sky over London, cut into a loop where satellites trace the same lines again and again.",
+    "link": "",
+    "image": "",
+    "createdAt": 1791203774583,
+    "example": true,
+    "pos": {
+      "x": 1145,
+      "y": -239,
+      "z": -855
+    }
+  },
+  {
+    "id": "example-23",
+    "title": "Space Junk Lamp",
+    "maker": "Marco Bianchi",
+    "programme": "Design Products",
+    "media": "Sheet (MDF)",
+    "year": "2024",
+    "description": "A lamp made of laser-cut MDF rings that you stack in any order. No two assemblies give the same shadow.",
+    "link": "",
+    "image": "",
+    "createdAt": 1779539774583,
+    "example": true,
+    "pos": {
+      "x": -1722,
+      "y": 116,
+      "z": -1079
+    }
+  },
+  {
+    "id": "example-24",
+    "title": "Telemetry Hum",
+    "maker": "Aiko Tanaka",
+    "programme": "Information Experience Design",
+    "media": "Sound",
+    "year": "2025",
+    "description": "A drone piece built from the data rate of one weather satellite across a single orbit.",
+    "link": "",
+    "image": "",
+    "createdAt": 1782131774583,
+    "example": true,
+    "pos": {
+      "x": -539,
+      "y": -66,
+      "z": 1928
+    }
+  }
+]
