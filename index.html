@@ -30,6 +30,7 @@ img{max-width:100%}
 html,body{height:100%;overflow:hidden}
 body{background:var(--void);color:var(--fg);font-family:var(--f-sans);font-weight:300;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
 #sky{position:fixed;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:none}
+#sky:focus{outline:none}
 #sky.dragging{cursor:grabbing}
 #sky.over{cursor:pointer}
 .lab{font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-48)}
@@ -240,7 +241,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
 </head>
 <body>
 
-<canvas id="sky" aria-label="A field of floating projects. Drag to steer, scroll to move, click a project to open it."></canvas>
+<canvas id="sky" tabindex="0" aria-label="A field of floating projects. Drag to steer, scroll to move, click a project to open it."></canvas>
 
 <header class="top">
   <h1 class="mark">across rca<span>a lost archive</span></h1>
@@ -270,9 +271,9 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   <div><span class="lab">Pos</span><b id="posR">0, 0, 0</b></div>
   <div><span class="lab" id="velL">Vel</span><b id="velR">0.0 u/s</b></div>
   <div><span class="lab">Nearest</span><b class="red" id="nearR">—</b></div>
-  <div><span class="lab">Mode</span><b id="modeR">Drift</b></div>
+  <div><span class="lab">Mode</span><b id="modeR">Drift · auto</b></div>
 </div>
-<div class="legend"><span class="lab" id="hintR">Drag · steer  /  Scroll · move  /  Space · overview</span></div>
+<div class="legend"><span class="lab" id="hintR">Arrows · steer  /  W S · speed  /  Space · overview</span></div>
 
 <div class="empty" id="empty" hidden></div>
 
@@ -572,9 +573,20 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
     if(!drift){ releaseOv(); ovCam.dist = Math.max(3.2, Math.min(22, ovCam.dist * Math.exp(e.deltaY*0.0012))); return; }
     if(selectedId) return; cam.targetSpeed = Math.max(-500, Math.min(900, cam.targetSpeed - e.deltaY*1.2)); flyTo=null; }, {passive:false});
   const keys = {};
-  addEventListener('keydown', e => { if(e.target.closest('input,textarea,select')) { if(e.key==='Escape') closeAll(); return; }
+  const inEl = (t, sel) => t instanceof Element && !!t.closest(sel);
+  addEventListener('keydown', e => { if(inEl(e.target, 'input,textarea,select')) { if(e.key==='Escape') closeAll(); return; }
     keys[e.key.toLowerCase()] = true; if(e.key===' '){ e.preventDefault(); setDrift(!drift); } if(e.key==='Escape'){ closeAll(); setIdx(false); } });
   addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+  addEventListener('blur', () => { for(const k in keys) keys[k] = false; });
+  /* drift steering: arrows / A D turn and tilt, W S change speed. Holding any of them takes over from auto-drift;
+     auto-drift fades back in a moment after the last key is released. */
+  const STEER = ['arrowleft','arrowright','arrowup','arrowdown','a','d','w','s'];
+  const tapAt = {};   // a tap shorter than a frame still counts as holding the key for a moment
+  addEventListener('keydown', e => { const k = e.key.toLowerCase(); if(STEER.includes(k)) tapAt[k] = performance.now(); });
+  const held = k => keys[k] || performance.now() - (tapAt[k] || -1e9) < 140;
+  const steering = () => !document.querySelector('.panel.open') && STEER.some(held);
+  let manualT = 0, autoAmt = 1, yawV = 0, pitchV = 0;
+  addEventListener('keydown', e => { if(drift && e.key.startsWith('Arrow') && !inEl(e.target, 'input,textarea,select,.panel,.majors')) e.preventDefault(); });
   function pick(mx,my){ let best=null, bd=1e9; for(const s of lastScreen){ const d=Math.hypot(mx-s.x,my-s.y); if(d < Math.max(14,s.r*1.3) && s.z < bd){ best=s.p; bd=s.z; } } return best; }
 
   function setDrift(on){
@@ -583,10 +595,19 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
     $('#driftBtn').setAttribute('aria-pressed', on);
     $('#modeR').textContent = on ? 'Drift' : 'Overview';
     document.body.classList.toggle('overview', !on);
-    $('#hintR').textContent = on ? 'Drag · steer  /  Scroll · move  /  Space · overview' : 'Drag · rotate  /  Scroll · zoom  /  Space · drift';
+    updateHint();
     flyTo = null; cam.targetSpeed = on ? CRUISE : 0; if(!on) cam.speed = 0;
   }
-  $('#driftBtn').onclick = () => setDrift(!drift);
+  $('#driftBtn').onclick = () => { setDrift(!drift); cv.focus({preventScroll:true}); };
+  /* Browsers only send key presses to a page that has focus. Take it on load where allowed (a page opened
+     from the address bar, a link or a QR scan usually allows it); otherwise say so in the hint. */
+  function updateHint(){
+    const h = $('#hintR'), away = drift && !document.hasFocus();
+    h.textContent = away ? 'Click the sky to steer with the arrow keys' : drift ? 'Arrows · steer  /  W S · speed  /  Space · overview' : 'Drag · rotate  /  Scroll · zoom  /  Space · drift';
+    h.classList.toggle('red', away); }
+  addEventListener('focus', updateHint); addEventListener('blur', updateHint); document.addEventListener('visibilitychange', updateHint);
+  try{ window.focus(); cv.focus({preventScroll:true}); }catch(e){}
+  updateHint(); setTimeout(updateHint, 300);
 
   function nearestImage(p){ return {x: cam.x + wrap(p.pos.x-cam.x, SPACE), y: cam.y + wrap(p.pos.y-cam.y, SPACE*.6), z: cam.z + wrap(p.pos.z-cam.z, SPACE)}; }
   function flyToProject(p){ flyTo = {p, stop: 520 + p.size*5}; cam.targetSpeed = 0; }
@@ -597,16 +618,22 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
 
   /* ---------- loop ---------- */
   let last = performance.now(), nearest = null, simT = 0;
+  const modeR = $('#modeR');
   function frame(now){
     const dt = Math.min(.05,(now-last)/1000); last = now;
     const frozen = !drift || (!!selectedId && !flyTo);
     if(!frozen) simT += dt; const T = simT;
     if(drift){
-      if(!frozen){
-        if(keys['w']||keys['arrowup']) cam.targetSpeed = Math.min(900, cam.targetSpeed + 500*dt);
-        if(keys['s']||keys['arrowdown']) cam.targetSpeed = Math.max(-500, cam.targetSpeed - 500*dt);
-        if(keys['a']||keys['arrowleft']) cam.yaw -= 1*dt;
-        if(keys['d']||keys['arrowright']) cam.yaw += 1*dt;
+      const manual = !frozen && !flyTo && steering();
+      if(manual){ manualT = 1.6; autoAmt = 0; } else manualT = Math.max(0, manualT - dt);
+      if(!manualT) autoAmt = Math.min(1, autoAmt + dt/2.5);   // ease auto-drift back in over ~2.5 s
+      const turn = manual ? ((held('arrowright')||held('d')) ? 1 : 0) - ((held('arrowleft')||held('a')) ? 1 : 0) : 0;
+      const tilt = manual ? (held('arrowup') ? 1 : 0) - (held('arrowdown') ? 1 : 0) : 0;
+      yawV = ease(yawV, turn*1.1, dt, 5); pitchV = ease(pitchV, tilt*.8, dt, 5);   // smooth turn rates, no snapping
+      if(!frozen && !flyTo){ cam.yaw += yawV*dt; cam.pitch = clampP(cam.pitch + pitchV*dt); }
+      if(manual){
+        if(held('w')) cam.targetSpeed = Math.min(900, cam.targetSpeed + 500*dt);
+        if(held('s')) cam.targetSpeed = Math.max(-500, cam.targetSpeed - 500*dt);
       }
       if(flyTo){
         const t = nearestImage(flyTo.p); const dx=t.x-cam.x, dy=t.y-cam.y, dz=t.z-cam.z, d=Math.hypot(dx,dy,dz)||1;
@@ -615,11 +642,14 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
         cam.yaw += dyaw*Math.min(1,dt*4); cam.pitch += (tp-cam.pitch)*Math.min(1,dt*4);
         cam.targetSpeed = Math.max(0, Math.min(1800, (d - flyTo.stop)*2.4));
         if(d - flyTo.stop < 8){ flyTo = null; cam.targetSpeed = 0; cam.speed = 0; }
-      } else if(!frozen && !drag){
+      } else if(!frozen && !drag && !manualT){
         wanderT -= dt; if(wanderT <= 0){ wanderT = 6+Math.random()*8; wanderYaw = (Math.random()-.5)*.12; wanderPitch = (Math.random()-.5)*.05; }
-        cam.yaw += wanderYaw*dt; cam.pitch = clampP(cam.pitch + wanderPitch*dt - cam.pitch*.05*dt);
-        cam.targetSpeed += (CRUISE - cam.targetSpeed)*dt*.12;
+        const a = autoAmt*autoAmt*(3 - 2*autoAmt);
+        cam.yaw += wanderYaw*dt*a; cam.pitch = clampP(cam.pitch + (wanderPitch - cam.pitch*.12)*dt*a);
+        cam.targetSpeed += (CRUISE - cam.targetSpeed)*dt*.25*a;
       }
+      const mt = !drift ? 'Overview' : manualT ? 'Drift · manual' : 'Drift · auto';
+      if(modeR.textContent !== mt) modeR.textContent = mt;
       if(frozen){ cam.speed = 0; cam.targetSpeed = 0; }
       cam.speed += (cam.targetSpeed - cam.speed)*Math.min(1,dt*1.8);
       const f = forward(); cam.x += f[0]*cam.speed*dt; cam.y += f[1]*cam.speed*dt; cam.z += f[2]*cam.speed*dt;
@@ -885,7 +915,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   $('#idxClose').onclick = () => setIdx(false);
   function openPanel(id){ if(id) setIdx(false); for(const e of document.querySelectorAll('.panel')){ const on = e.id===id; e.classList.toggle('open', on); e.setAttribute('aria-hidden', !on); }
     if(id!=='detail') selectedId = null; }
-  function closeAll(){ openPanel(null); }
+  function closeAll(){ openPanel(null); if(!inEl(document.activeElement, '.majors')) cv.focus({preventScroll:true}); }
   document.querySelectorAll('[data-close]').forEach(b => b.onclick = closeAll);
   function el(tag, attrs={}, text){ const e=document.createElement(tag); for(const k in attrs) e.setAttribute(k, attrs[k]); if(text!=null) e.textContent=text; return e; }
   function tagEl(text, color, bubble){ const t = el('span',{class:'tag'+(bubble?' bub':'')}); const i = el('i'); i.style.setProperty('--c', color); t.append(i, document.createTextNode(text)); return t; }
