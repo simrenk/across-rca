@@ -255,52 +255,93 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
 .p-hero:hover .p-img{border-color:var(--fg-48)}
 
 /* full-screen viewer */
-.stage{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.97);display:grid;grid-template-rows:auto 1fr auto;
+.stage{position:fixed;inset:0;z-index:30;background:rgba(3,3,6,.97);display:grid;grid-template-rows:auto 1fr;
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:stagein .35s ease}
 .stage[hidden]{display:none}
-@keyframes stagein{from{opacity:0}to{opacity:1}}
-.stage-top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:calc(env(safe-area-inset-top,0px) + 16px) max(24px, env(safe-area-inset-right,0px)) 12px max(24px, env(safe-area-inset-left,0px))}
-.stage-title{display:grid;gap:2px;min-width:0}
-.stage-title b{font-weight:300;font-size:22px;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.stage-tools{display:flex;align-items:center;gap:16px;flex-shrink:0}
-.stage-tools .btn{padding:8px 12px;font-size:10px}
-.stage-main{position:relative;min-height:0;overflow:hidden;display:grid;place-items:center;padding:0 72px}
+.stage:focus{outline:none}
+@keyframes stagein{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
+.stage-top{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--fg-12);
+  padding:calc(env(safe-area-inset-top,0px) + 12px) max(20px, env(safe-area-inset-right,0px)) 12px max(20px, env(safe-area-inset-left,0px))}
+.stage-back{padding:10px 14px}
+.stage-tools{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.stage-tools .btn{padding:10px 14px}
+.stage-x{width:44px;height:44px;border-radius:50%;border:1px solid var(--fg-48);font:200 28px/1 var(--f-sans);color:var(--fg);display:grid;place-items:center;transition:background .15s,color .15s,border-color .15s}
+.stage-x:hover{background:var(--fg);color:#000;border-color:var(--fg)}
+.stage-body{min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 360px}
+.stage-media{position:relative;min-height:0;display:grid;grid-template-rows:1fr auto}
+.stage-main{position:relative;min-height:0;overflow:hidden;display:grid;place-items:center;padding:20px 76px 8px}
 .stage-main > *{max-width:100%;max-height:100%}
-.stage-main video{width:100%;height:100%;object-fit:contain;background:#000}
+.stage-main video{width:100%;height:100%;object-fit:contain;background:#000;border-radius:10px}
 .stage-main iframe{width:100%;height:100%;border:0;background:#fff;border-radius:10px}
-.stage-main model-viewer{width:100%;height:100%;--poster-color:transparent;background:radial-gradient(circle at 50% 40%,#1b1f2e,#000 70%)}
-.stage-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:48px;height:48px;font:200 36px/1 var(--f-sans);color:var(--fg-72);border:1px solid var(--fg-24);border-radius:50%;background:rgba(0,0,0,.5)}
-.stage-nav:hover{color:var(--fg);border-color:var(--fg-72)}
+.stage-main model-viewer{width:100%;height:100%;border-radius:12px;--poster-color:transparent;background:radial-gradient(circle at 50% 40%,#1b1f2e,#000 70%)}
+.stage-nav{position:absolute;top:calc(50% - 40px);transform:translateY(-50%);z-index:2;width:48px;height:48px;font:200 34px/1 var(--f-sans);color:var(--fg);border:1px solid var(--fg-24);border-radius:50%;background:rgba(0,0,0,.6)}
+.stage-nav:hover{border-color:var(--fg);background:rgba(255,255,255,.08)}
 .stage-nav.prev{left:14px}.stage-nav.next{right:14px}
 .stage-nav[hidden]{display:none}
-.stage-strip{display:flex;gap:8px;justify-content:center;overflow-x:auto;padding:12px max(24px, env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 16px) max(24px, env(safe-area-inset-left,0px));scrollbar-width:thin}
-.stage-strip button{flex:0 0 auto;width:64px;height:48px;border:1px solid var(--fg-24);border-radius:8px;overflow:hidden;display:grid;place-items:center;font:400 9px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--fg-48);background:#0a0a0d}
+.stage-strip{display:flex;gap:8px;justify-content:safe center;overflow-x:auto;padding:10px 20px 18px;scrollbar-width:thin}
+.stage-strip button{flex:0 0 auto;width:72px;height:52px;border:1px solid var(--fg-24);border-radius:8px;overflow:hidden;display:grid;place-items:center;font:400 9px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--fg-48);background:#0a0a0d;transition:border-color .15s,color .15s}
+.stage-strip button:hover{border-color:var(--fg-72);color:var(--fg)}
 .stage-strip button img{width:100%;height:100%;object-fit:cover}
-.stage-strip button[aria-current="true"]{border-color:var(--fg);color:var(--fg)}
+.stage-strip button[aria-current="true"]{border-color:var(--fg);color:var(--fg);box-shadow:0 0 0 1px var(--fg)}
 .stage-strip:has(> :only-child){display:none}
+.stage-info{border-left:1px solid var(--fg-12);overflow-y:auto;padding:24px 24px 28px;display:grid;align-content:start;gap:16px;scrollbar-width:thin;scrollbar-color:var(--fg-24) transparent}
+.stage-info .p-title{font-size:32px}
+.stage-info .keys{margin-top:8px;padding-top:14px;border-top:1px solid var(--fg-12)}
+/* zoom controls */
+.zctl{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:3;display:flex;align-items:center;gap:2px;padding:4px;border:1px solid var(--fg-24);border-radius:999px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.zctl button{min-width:36px;height:32px;padding:0 10px;border-radius:999px;font:400 15px var(--f-mono);color:var(--fg)}
+.zctl button:hover{background:rgba(255,255,255,.12)}
+.zctl .zl{font-size:11px;letter-spacing:.08em;color:var(--fg-72);min-width:56px}
 /* zoomable image */
 .zoom{position:absolute;inset:0;overflow:hidden;cursor:zoom-in;touch-action:none;display:grid;place-items:center}
 .zoom.zoomed{cursor:grab}.zoom.dragging{cursor:grabbing}
 .zoom img{max-width:calc(100% - 0px);max-height:100%;object-fit:contain;transform-origin:0 0;will-change:transform;user-select:none;-webkit-user-drag:none}
-.zoom-hint{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);pointer-events:none}
+.zoom-hint{position:absolute;left:50%;bottom:58px;transform:translateX(-50%);pointer-events:none;white-space:nowrap;transition:opacity .3s}
 /* sound */
 .sound{width:min(900px,100%);display:grid;gap:18px;justify-items:center}
 .sound canvas{width:100%;height:180px;cursor:pointer}
 .sound .row-s{display:flex;align-items:center;gap:16px;font:400 12px var(--f-mono);color:var(--fg-72)}
 .sound .play{width:56px;height:56px;border-radius:50%;background:var(--fg);color:#000;font-size:18px}
 /* link / pdf note */
-.frame-wrap{width:100%;height:100%;display:grid;grid-template-rows:1fr auto;gap:8px;padding-bottom:4px}
-.frame-wrap .note{text-align:center}
+.frame-wrap{width:100%;height:100%;display:grid;grid-template-rows:auto 1fr;gap:10px}
+.frame-bar{display:flex;align-items:center;gap:14px}
+.frame-bar .btn{padding:8px 12px}
+/* PDF pages */
+.pdf{width:100%;height:100%;overflow-y:auto;display:grid;justify-items:center;align-content:start;gap:14px;padding:4px 0 24px;scrollbar-width:thin;scrollbar-color:var(--fg-24) transparent}
+.pdf-page{background:#fff;border-radius:4px;box-shadow:0 10px 40px rgba(0,0,0,.6);max-width:100%}
+.pdf-status{position:sticky;top:0;z-index:1;padding:6px 10px;background:rgba(3,3,6,.85);border:1px solid var(--fg-12);border-radius:999px}
+/* link card */
+.link-card{display:grid;justify-items:center;gap:12px;text-align:center;max-width:560px;padding:40px 32px;border:1px solid var(--fg-12);border-radius:18px;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.06),transparent 70%)}
+.link-ico{width:40px;height:40px;border-radius:10px;background:#fff;padding:6px}
+.link-host{font-weight:300;font-size:30px;letter-spacing:-.02em;overflow-wrap:anywhere}
+.link-url{overflow-wrap:anywhere;max-width:46ch}
+.link-card .p-actions{justify-content:center;margin-top:6px}
+/* 3D */
+.mv-wrap{position:relative;width:100%;height:100%}
+.mv-wrap model-viewer{width:100%;height:100%}
+.mv-load{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:12px;pointer-events:none;transition:opacity .4s}
+.mv-load.done{opacity:0}
+.mv-bar{width:180px;height:2px;background:var(--fg-12);overflow:hidden}
+.mv-bar i{display:block;height:100%;width:0;background:var(--fg);transition:width .2s}
+.mv-tip{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);opacity:0;transition:opacity .5s;pointer-events:none;white-space:nowrap}
+.mv-tip.on{opacity:.8}
 .preview-big{max-width:min(1100px,100%);max-height:100%;border-radius:12px;border:1px solid var(--fg-12)}
-.stage-empty{display:grid;gap:14px;justify-items:center;text-align:center;max-width:480px}
-.stage-empty .p-desc{text-align:left}
-@media (max-width:640px){
-  .stage-main{padding:0}
+.stage-empty{display:grid;gap:14px;justify-items:center;text-align:center;max-width:620px}
+@media (max-width:900px){
+  .stage{overflow-y:auto;grid-template-rows:auto auto}
+  .stage-top{position:sticky;top:0;z-index:4;background:rgba(3,3,6,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .stage-body{grid-template-columns:1fr;grid-template-rows:auto auto}
+  .stage-media{height:min(62dvh, 560px)}
+  .stage-main{padding:10px 8px 4px}
+  .stage-info{border-left:0;border-top:1px solid var(--fg-12);overflow:visible;padding:20px 20px calc(env(safe-area-inset-bottom,0px) + 28px)}
+  .stage-info .keys{display:none}
   .stage-nav{width:40px;height:40px;font-size:28px;background:rgba(0,0,0,.65)}
   .stage-nav.prev{left:6px}.stage-nav.next{right:6px}
+}
+@media (max-width:640px){
   .stage-tools .btn{display:none}
-  .stage-title b{font-size:18px}
-  .stage-main iframe{border-radius:0}
+  #sCount{display:none}
+  .stage-back{padding:9px 12px;font-size:10px}
 }
 @media (prefers-reduced-motion: reduce){ .stage{animation:none} }
 @keyframes sheetup{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
@@ -383,15 +424,21 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
 </aside>
 
 
-<div class="stage" id="stage" role="dialog" aria-modal="true" aria-label="Project viewer" hidden>
+<div class="stage" id="stage" role="dialog" aria-modal="true" aria-label="Project viewer" tabindex="-1" hidden>
   <div class="stage-top">
-    <div class="stage-title"><b id="sTitle"></b><span class="lab" id="sSub"></span></div>
-    <div class="stage-tools"><span class="lab" id="sCount"></span><a class="btn" id="sOpen" target="_blank" rel="noopener">Open original ↗</a><button class="close" type="button" id="sClose" aria-label="Close viewer">Close ×</button></div>
+    <button class="btn stage-back" type="button" id="sBack">← Back to orbit</button>
+    <span class="lab" id="sCount"></span>
+    <div class="stage-tools"><a class="btn" id="sOpen" target="_blank" rel="noopener">Open original ↗</a><button class="stage-x" type="button" id="sClose" aria-label="Close viewer">×</button></div>
   </div>
-  <div class="stage-main" id="sMain"></div>
-  <button class="stage-nav prev" type="button" id="sPrev" aria-label="Previous">‹</button>
-  <button class="stage-nav next" type="button" id="sNext" aria-label="Next">›</button>
-  <div class="stage-strip" id="sStrip"></div>
+  <div class="stage-body">
+    <div class="stage-media">
+      <div class="stage-main" id="sMain"></div>
+      <button class="stage-nav prev" type="button" id="sPrev" aria-label="Previous item">‹</button>
+      <button class="stage-nav next" type="button" id="sNext" aria-label="Next item">›</button>
+      <div class="stage-strip" id="sStrip"></div>
+    </div>
+    <aside class="stage-info" id="sInfo"></aside>
+  </div>
 </div>
 
 <div class="toast" id="toast" role="status"></div>
@@ -995,8 +1042,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   let stage = null;   // {p, items, i, cleanup}
   function openStage(p, i){
     stage = {p, items: viewItems(p), i: 0, cleanup: null};
-    $('#sTitle').textContent = p.title || 'Untitled';
-    $('#sSub').textContent = [p.maker, p.programme, p.year].filter(Boolean).join('  ·  ');
+    renderStageInfo(p);
     const strip = $('#sStrip'); strip.replaceChildren();
     stage.items.forEach((it, k) => { const b = el('button',{type:'button','aria-label':KLAB[it.kind] + ' ' + (k+1)});
       if(it.kind==='image'){ const im = el('img',{alt:'',loading:'lazy'}); im.src = it.url; b.append(im); }
@@ -1004,21 +1050,37 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
       else b.textContent = KLAB[it.kind];
       b.onclick = () => showItem(k); strip.append(b); });
     $('#stage').hidden = false; document.body.classList.add('staging');
-    showItem(i || 0); $('#sClose').focus({preventScroll:true});
+    showItem(i || 0); $('#stage').focus({preventScroll:true});
   }
   function closeStage(){ if(!stage) return; if(stage.cleanup) stage.cleanup(); stage = null; $('#sMain').replaceChildren(); $('#stage').hidden = true; document.body.classList.remove('staging'); cv.focus({preventScroll:true}); }
-  $('#sClose').onclick = closeStage;
+  $('#sClose').onclick = closeStage; $('#sBack').onclick = closeStage;
+  // clicking the empty dark area around the media also closes
+  $('#sMain').addEventListener('click', e => { if(e.target === e.currentTarget) closeStage(); });
+  function renderStageInfo(p){
+    const box = $('#sInfo'); box.replaceChildren(); const g = progName(p);
+    const tg = el('div',{class:'tags'}); if(p.media) tg.append(tagEl(p.media, medHex(p.media))); tg.append(tagEl(g, bubbleCss(g), true)); if(isNew(p)) tg.append(tagEl('New','var(--signal)'));
+    box.append(tg, el('h2',{class:'p-title'}, p.title || 'Untitled'));
+    const dl = el('dl',{class:'p-meta'}); const add = (k,v) => { if(v) dl.append(el('dt',{},k), el('dd',{},v)); };
+    add('Maker', p.maker); add('Major', p.programme); add('Year', p.year); box.append(dl);
+    if(p.description) box.append(el('p',{class:'p-desc'}, p.description));
+    const own = tagsOf(p); if(own.length){ const ht = el('div',{class:'tags'}); for(const t of own) ht.append(el('span',{class:'tag hash'}, t)); box.append(ht); }
+    if(p.link && /^https?:\/\//i.test(p.link)){ const acts = el('div',{class:'p-actions'}); acts.append(el('a',{class:'btn solid',href:p.link,target:'_blank',rel:'noopener'},'Open project link ↗')); box.append(acts); }
+    box.append(el('p',{class:'note keys'}, 'Esc · back to orbit    ← → · previous / next'));
+  }
   $('#sPrev').onclick = () => stage && showItem((stage.i - 1 + stage.items.length) % stage.items.length);
   $('#sNext').onclick = () => stage && showItem((stage.i + 1) % stage.items.length);
   addEventListener('keydown', e => { if(!stage) return;
     if(e.key==='Escape'){ e.stopImmediatePropagation(); closeStage(); }
     else if(e.key==='ArrowRight' && !inEl(e.target, 'model-viewer')) $('#sNext').click();
-    else if(e.key==='ArrowLeft' && !inEl(e.target, 'model-viewer')) $('#sPrev').click(); }, true);
+    else if(e.key==='ArrowLeft' && !inEl(e.target, 'model-viewer')) $('#sPrev').click();
+    else if((e.key==='+' || e.key==='=') && $('.zctl')) $('.zctl button:last-child').click();
+    else if(e.key==='-' && $('.zctl')) $('.zctl button:first-child').click(); }, true);
   function showItem(k){
+    if(document.activeElement && document.activeElement.tagName === 'IFRAME') $('#stage').focus({preventScroll:true});
     if(stage.cleanup){ stage.cleanup(); stage.cleanup = null; }
     stage.i = k; const it = stage.items[k], m = $('#sMain'); m.replaceChildren();
     [...$('#sStrip').children].forEach((b, j) => b.setAttribute('aria-current', String(j===k)));
-    $('#sStrip').children[k]?.scrollIntoView({block:'nearest', inline:'center'});
+    { const st = $('#sStrip'), b = st.children[k]; if(b) st.scrollTo({left: b.offsetLeft - (st.clientWidth - b.offsetWidth)/2, behavior: reduce ? 'auto' : 'smooth'}); }
     const many = stage.items.length > 1; $('#sPrev').hidden = !many; $('#sNext').hidden = !many;
     $('#sCount').textContent = many ? `${KLAB[it.kind]} · ${k+1} / ${stage.items.length}` : KLAB[it.kind];
     const open = $('#sOpen'); if(it.url){ open.href = it.url; open.hidden = false; } else open.hidden = true;
@@ -1027,8 +1089,9 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   }
   function zoomView(m, it){
     const box = el('div',{class:'zoom'}), img = el('img',{alt:'',draggable:'false'}); img.src = it.url; box.append(img);
-    const hint = el('span',{class:'lab zoom-hint'}, matchMedia('(pointer:coarse)').matches ? 'Pinch to zoom · double-tap to reset' : 'Scroll or double-click to zoom · drag to pan'); box.append(hint);
-    m.append(box);
+    const hint = el('span',{class:'lab zoom-hint'}, matchMedia('(pointer:coarse)').matches ? 'Pinch or double-tap to zoom' : 'Scroll, double-click or use + to zoom · drag to move around'); box.append(hint);
+    const ctl = el('div',{class:'zctl'}), zo = el('button',{type:'button','aria-label':'Zoom out'},'−'), zl = el('button',{type:'button',class:'zl','aria-label':'Reset zoom'},'100%'), zi = el('button',{type:'button','aria-label':'Zoom in'},'+');
+    ctl.append(zo, zl, zi); m.append(box, ctl);
     let s = 1, x = 0, y = 0, base = null; const ptr = new Map(); let pinch = null, dragP = null;
     const fit = () => { const r = box.getBoundingClientRect(), w = img.naturalWidth || 1, h = img.naturalHeight || 1;
       const k = Math.min(r.width/w, r.height/h, 1); base = {w: w*k, h: h*k, ox: (r.width - w*k)/2, oy: (r.height - h*k)/2};
@@ -1038,7 +1101,11 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
       if(w <= r.width) x = (r.width - w)/2 - base.ox; else x = Math.max(minX, Math.min(maxX, x));
       if(h <= r.height) y = (r.height - h)/2 - base.oy; else y = Math.max(minY, Math.min(maxY, y)); };
     const apply = (anim) => { if(!base) return; clamp(); img.style.transition = anim && !reduce ? 'transform .25s ease' : 'none';
-      img.style.transform = `translate(${base.ox + x}px,${base.oy + y}px) scale(${s})`; box.classList.toggle('zoomed', s > 1.01); hint.style.opacity = s > 1.01 ? 0 : .8; };
+      img.style.transform = `translate(${base.ox + x}px,${base.oy + y}px) scale(${s})`; box.classList.toggle('zoomed', s > 1.01); hint.style.opacity = s > 1.01 ? 0 : .8;
+      zl.textContent = Math.round(s*100) + '%'; };
+    const mid = () => { const r = box.getBoundingClientRect(); return [r.left + r.width/2, r.top + r.height/2]; };
+    zi.onclick = () => base && zoomAt(s*1.5, ...mid(), true); zo.onclick = () => base && zoomAt(s/1.5, ...mid(), true);
+    zl.onclick = () => { if(!base) return; s = 1; x = 0; y = 0; apply(true); };
     const zoomAt = (ns, cxp, cyp, anim) => { const r = box.getBoundingClientRect(); ns = Math.max(1, Math.min(6, ns));
       const px = cxp - r.left - base.ox, py = cyp - r.top - base.oy; x = px - (px - x) * ns/s; y = py - (py - y) * ns/s; s = ns; apply(anim); };
     const ready = () => { fit(); apply(); }; if(img.complete && img.naturalWidth) ready(); else img.onload = ready;
@@ -1081,11 +1148,48 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
     const onR = () => draw(); addEventListener('resize', onR); requestAnimationFrame(draw);
     return () => { au.pause(); cancelAnimationFrame(raf); removeEventListener('resize', onR); };
   }
-  function pdfView(m, it){ const w = el('div',{class:'frame-wrap'}), fr = el('iframe',{title:'PDF'}); fr.src = it.url + '#view=FitH'; w.append(fr, el('p',{class:'note'}, 'If the PDF does not show here, use Open original.')); m.append(w); }
-  function linkView(m, it){ const w = el('div',{class:'frame-wrap'}), fr = el('iframe',{title:'Project link',sandbox:'allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock',allow:'fullscreen; autoplay; xr-spatial-tracking',referrerpolicy:'no-referrer'});
-    fr.src = it.url; w.append(fr, el('p',{class:'note'}, 'Some sites refuse to be shown inside another page. If this stays blank, use Open original.')); m.append(w); }
+  let pdfjsLoading = null;
+  function loadPdfjs(){
+    if(!pdfjsLoading) pdfjsLoading = new Promise((res, rej) => { const sc = document.createElement('script');
+      sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      sc.onload = () => { pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; res(pdfjsLib); };
+      sc.onerror = rej; document.head.append(sc); });
+    return pdfjsLoading;
+  }
+  function pdfView(m, it){
+    const wrap = el('div',{class:'pdf'}), status = el('p',{class:'lab pdf-status'}, 'Loading PDF…'); wrap.append(status); m.append(wrap);
+    let alive = true, doc = null;
+    loadPdfjs().then(lib => lib.getDocument({url: it.url}).promise).then(async d => { doc = d; if(!alive) return;
+      status.textContent = `${d.numPages} page${d.numPages>1?'s':''} · scroll to read`;
+      const width = Math.min(wrap.clientWidth - (wrap.clientWidth > 560 ? 120 : 16), 980), dpr = Math.min(2, devicePixelRatio||1);
+      for(let n=1; n<=Math.min(d.numPages, 60) && alive; n++){
+        const page = await d.getPage(n); const v1 = page.getViewport({scale:1}); const k = width / v1.width; const vp = page.getViewport({scale: k*dpr});
+        const c = el('canvas',{class:'pdf-page','aria-label':'Page ' + n}); c.width = vp.width; c.height = vp.height; c.style.width = width + 'px'; c.style.height = (vp.height/dpr) + 'px';
+        wrap.append(c); await page.render({canvasContext: c.getContext('2d'), viewport: vp}).promise; }
+      if(d.numPages > 60 && alive) wrap.append(el('p',{class:'note'}, 'Showing the first 60 pages. Use Open original for the rest.'));
+    }).catch(() => { if(alive) status.textContent = 'This PDF could not be shown here. Use Open original ↗ to read it.'; });
+    return () => { alive = false; if(doc) doc.destroy(); };
+  }
+  function linkView(m, it){
+    let host = it.url; try{ host = new URL(it.url).hostname.replace(/^www\./,''); }catch(e){}
+    const card = el('div',{class:'link-card'});
+    const ic = el('img',{class:'link-ico',alt:'',referrerpolicy:'no-referrer'}); try{ ic.src = new URL("/favicon.ico", it.url).href; }catch(e){} ic.onerror = () => ic.remove();
+    const acts = el('div',{class:'p-actions'});
+    const go = el('a',{class:'btn solid',href:it.url,target:'_blank',rel:'noopener'}, 'Open site ↗');
+    const pv = el('button',{class:'btn',type:'button'}, 'Try a preview here');
+    acts.append(go, pv);
+    card.append(ic, el('span',{class:'lab'}, 'Project link'), el('b',{class:'link-host'}, host), el('span',{class:'note link-url'}, it.url), acts);
+    m.append(card);
+    pv.onclick = () => {
+      const w = el('div',{class:'frame-wrap'}), bar = el('div',{class:'frame-bar'}), back = el('button',{class:'btn',type:'button'}, '← Link card');
+      bar.append(back, el('span',{class:'note'}, 'Some sites refuse to appear inside another page. If this stays blank, use Open site.'));
+      const fr = el('iframe',{'aria-label':'Preview of ' + host,sandbox:'allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock',allow:'fullscreen; autoplay; xr-spatial-tracking',referrerpolicy:'no-referrer'});
+      fr.src = it.url; w.append(bar, fr); m.replaceChildren(w);
+      fr.addEventListener('mouseleave', () => { if(document.activeElement === fr) $('#stage').focus({preventScroll:true}); }); back.onclick = () => { m.replaceChildren(card); };
+    };
+  }
   function previewView(m, it, p){ const w = el('div',{class:'stage-empty'}), im = el('img',{class:'preview-big',alt:(p.media||'Project') + ' preview'}); im.src = p.thumb.toDataURL('image/png');
-    w.append(im); if(p.description) w.append(el('p',{class:'p-desc'}, p.description)); m.append(w); }
+    w.append(im, el('p',{class:'note'}, p.example ? 'Example project · a generated preview, no files attached' : 'No files were uploaded with this project, so this is a generated preview.')); m.append(w); }
   let mvLoading = null;
   function modelView(m, it){
     const box = el('div',{class:'lab'}, 'Loading 3D viewer…'); m.append(box);
@@ -1095,7 +1199,14 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
     mvLoading.then(() => customElements.whenDefined('model-viewer')).then(() => { if(!alive) return;
       const mv = document.createElement('model-viewer'); mv.setAttribute('src', it.url); mv.setAttribute('camera-controls',''); mv.setAttribute('auto-rotate','');
       mv.setAttribute('shadow-intensity','1'); mv.setAttribute('exposure','1.05'); mv.setAttribute('environment-image','neutral'); mv.setAttribute('touch-action','none');
-      mv.setAttribute('interaction-prompt','auto'); mv.setAttribute('alt','3D model, drag to rotate'); m.replaceChildren(mv); })
+      mv.setAttribute('interaction-prompt','auto'); mv.setAttribute('alt','3D model, drag to rotate');
+      const wrap = el('div',{class:'mv-wrap'}), load = el('div',{class:'mv-load'}), bar = el('i'), txt = el('span',{class:'lab'}, 'Loading model…');
+      load.append(txt, el('span',{class:'mv-bar'})); load.lastChild.append(bar);
+      const tip = el('span',{class:'lab mv-tip'}, matchMedia('(pointer:coarse)').matches ? 'Drag to spin · pinch to zoom' : 'Drag to spin · scroll to zoom · right-drag to move');
+      wrap.append(mv, load, tip); m.replaceChildren(wrap);
+      mv.addEventListener('progress', e => { bar.style.width = Math.round((e.detail.totalProgress||0)*100) + '%'; });
+      mv.addEventListener('load', () => { load.classList.add('done'); tip.classList.add('on'); });
+      mv.addEventListener('error', () => { txt.textContent = 'This model could not be shown. Use Open original ↗ to download it.'; load.lastChild.remove(); }); })
       .catch(() => { box.textContent = 'The 3D viewer could not load. Use Open original to download the model.'; });
     return () => { alive = false; };
   }
