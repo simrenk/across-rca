@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="across rca: a lost archive of RCA student projects inspired by space debris.">
-<title>across rca</title>
+<meta name="description" content="Still in Orbit: an archive of lost RCA projects, drifting like space debris.">
+<title>Still in Orbit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@200;300;400;500&family=Geist+Mono:wght@300;400;500&display=swap">
 <style>
@@ -236,6 +236,73 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   .panel{height:min(64dvh, 600px);transform:translateY(40px)}
   .p-img{aspect-ratio:16/10}
 }
+/* launch: picked files */
+.flist{list-style:none;margin:-6px 0 0;padding:0;display:grid;gap:6px}
+.flist:empty{display:none}
+.flist li{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;border:1px solid var(--fg-12);border-radius:10px;padding:6px 8px;font:400 11px/1.3 var(--f-mono);color:var(--fg-72)}
+.flist li img,.flist li .ficon{width:40px;height:40px;border-radius:6px;object-fit:cover;background:#111;display:grid;place-items:center;font-size:9px;letter-spacing:.1em;color:var(--fg-48);text-transform:uppercase}
+.flist li span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.flist li small{display:block;color:var(--fg-48)}
+.flist li button{color:var(--fg-48);padding:4px}
+.flist li button:hover{color:var(--signal)}
+.drop{gap:6px}
+.drop .note{font-size:10px}
+
+/* project hero opens the viewer */
+.p-hero{position:relative;display:block;width:100%;padding:0;border-radius:12px;cursor:zoom-in}
+.p-hero .p-img{pointer-events:none}
+.p-hero::after{content:attr(data-count);position:absolute;right:10px;bottom:10px;font:400 10px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;padding:6px 9px;background:rgba(0,0,0,.6);border:1px solid var(--fg-24);color:var(--fg)}
+.p-hero:hover .p-img{border-color:var(--fg-48)}
+
+/* full-screen viewer */
+.stage{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.97);display:grid;grid-template-rows:auto 1fr auto;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:stagein .35s ease}
+.stage[hidden]{display:none}
+@keyframes stagein{from{opacity:0}to{opacity:1}}
+.stage-top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:calc(env(safe-area-inset-top,0px) + 16px) max(24px, env(safe-area-inset-right,0px)) 12px max(24px, env(safe-area-inset-left,0px))}
+.stage-title{display:grid;gap:2px;min-width:0}
+.stage-title b{font-weight:300;font-size:22px;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stage-tools{display:flex;align-items:center;gap:16px;flex-shrink:0}
+.stage-tools .btn{padding:8px 12px;font-size:10px}
+.stage-main{position:relative;min-height:0;overflow:hidden;display:grid;place-items:center;padding:0 72px}
+.stage-main > *{max-width:100%;max-height:100%}
+.stage-main video{width:100%;height:100%;object-fit:contain;background:#000}
+.stage-main iframe{width:100%;height:100%;border:0;background:#fff;border-radius:10px}
+.stage-main model-viewer{width:100%;height:100%;--poster-color:transparent;background:radial-gradient(circle at 50% 40%,#1b1f2e,#000 70%)}
+.stage-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:48px;height:48px;font:200 36px/1 var(--f-sans);color:var(--fg-72);border:1px solid var(--fg-24);border-radius:50%;background:rgba(0,0,0,.5)}
+.stage-nav:hover{color:var(--fg);border-color:var(--fg-72)}
+.stage-nav.prev{left:14px}.stage-nav.next{right:14px}
+.stage-nav[hidden]{display:none}
+.stage-strip{display:flex;gap:8px;justify-content:center;overflow-x:auto;padding:12px max(24px, env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 16px) max(24px, env(safe-area-inset-left,0px));scrollbar-width:thin}
+.stage-strip button{flex:0 0 auto;width:64px;height:48px;border:1px solid var(--fg-24);border-radius:8px;overflow:hidden;display:grid;place-items:center;font:400 9px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--fg-48);background:#0a0a0d}
+.stage-strip button img{width:100%;height:100%;object-fit:cover}
+.stage-strip button[aria-current="true"]{border-color:var(--fg);color:var(--fg)}
+.stage-strip:has(> :only-child){display:none}
+/* zoomable image */
+.zoom{position:absolute;inset:0;overflow:hidden;cursor:zoom-in;touch-action:none;display:grid;place-items:center}
+.zoom.zoomed{cursor:grab}.zoom.dragging{cursor:grabbing}
+.zoom img{max-width:calc(100% - 0px);max-height:100%;object-fit:contain;transform-origin:0 0;will-change:transform;user-select:none;-webkit-user-drag:none}
+.zoom-hint{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);pointer-events:none}
+/* sound */
+.sound{width:min(900px,100%);display:grid;gap:18px;justify-items:center}
+.sound canvas{width:100%;height:180px;cursor:pointer}
+.sound .row-s{display:flex;align-items:center;gap:16px;font:400 12px var(--f-mono);color:var(--fg-72)}
+.sound .play{width:56px;height:56px;border-radius:50%;background:var(--fg);color:#000;font-size:18px}
+/* link / pdf note */
+.frame-wrap{width:100%;height:100%;display:grid;grid-template-rows:1fr auto;gap:8px;padding-bottom:4px}
+.frame-wrap .note{text-align:center}
+.preview-big{max-width:min(1100px,100%);max-height:100%;border-radius:12px;border:1px solid var(--fg-12)}
+.stage-empty{display:grid;gap:14px;justify-items:center;text-align:center;max-width:480px}
+.stage-empty .p-desc{text-align:left}
+@media (max-width:640px){
+  .stage-main{padding:0}
+  .stage-nav{width:40px;height:40px;font-size:28px;background:rgba(0,0,0,.65)}
+  .stage-nav.prev{left:6px}.stage-nav.next{right:6px}
+  .stage-tools .btn{display:none}
+  .stage-title b{font-size:18px}
+  .stage-main iframe{border-radius:0}
+}
+@media (prefers-reduced-motion: reduce){ .stage{animation:none} }
 @keyframes sheetup{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
 </style>
 </head>
@@ -244,7 +311,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
 <canvas id="sky" tabindex="0" aria-label="A field of floating projects. Drag to steer, scroll to move, click a project to open it."></canvas>
 
 <header class="top">
-  <h1 class="mark">across rca<span>a lost archive</span></h1>
+  <h1 class="mark">Still in Orbit<span>An archive of lost RCA projects</span></h1>
   <nav class="nav" aria-label="Main">
     <button class="toggle" id="driftBtn" type="button" aria-pressed="true" aria-label="Switch between drift and overview"><span class="opt" data-opt="drift">Drift</span><i></i><span class="opt" data-opt="overview">Overview</span></button>
     <button class="btn signal" id="addBtn" type="button">+ Launch</button>
@@ -285,11 +352,12 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
 <aside class="panel glass" id="upload" aria-label="Launch a project" aria-hidden="true">
   <div class="panel-head"><span class="lab">Launch into orbit</span><button class="close" type="button" data-close aria-label="Close">ESC ×</button></div>
   <form class="panel-body" id="form" novalidate>
-    <div class="drop" id="drop" tabindex="0" role="button" aria-label="Add a file of your project">
-      <span id="dropText">Drop a file here, or click to choose<br>Image, video or PDF · up to 20 MB</span>
-      <img id="dropPrev" alt="" hidden>
+    <div class="drop" id="drop" tabindex="0" role="button" aria-label="Add files of your project">
+      <span id="dropText">Drop files here, or click to choose</span>
+      <span class="note" id="dropHint">Images, video, sound, PDF or a 3D model (.glb) · up to 8 files · 50 MB each</span>
     </div>
-    <input type="file" id="file" accept="image/*,video/*,application/pdf" hidden>
+    <ul class="flist" id="flist"></ul>
+    <input type="file" id="file" multiple accept="image/*,video/*,audio/*,application/pdf,.glb,model/gltf-binary" hidden>
     <div class="field"><label for="fTitle">Project title *</label><input id="fTitle" maxlength="90" required placeholder="Kessler Garden"></div>
     <div class="row2">
       <div class="field"><label for="fMaker">Made by *</label><input id="fMaker" maxlength="80" required placeholder="Your name"></div>
@@ -310,10 +378,21 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
     <div class="field"><label for="fLink">Link</label><input id="fLink" type="url" maxlength="300" placeholder="https://"></div>
     <p class="err" id="fErr" role="alert"></p>
     <div><button class="btn solid" type="submit" id="fSubmit">Launch</button></div>
-    <p class="note">DXF, 3D and code files can't be stored directly. Upload a render, screenshot or PDF and set the medium. Your project gets a random position somewhere in the field.</p>
+    <p class="note" id="fNote">For DXF, MDF cut files or code, upload renders, a PDF or a screen recording, and add a link to the source. Your project gets a random position somewhere in the field.</p>
   </form>
 </aside>
 
+
+<div class="stage" id="stage" role="dialog" aria-modal="true" aria-label="Project viewer" hidden>
+  <div class="stage-top">
+    <div class="stage-title"><b id="sTitle"></b><span class="lab" id="sSub"></span></div>
+    <div class="stage-tools"><span class="lab" id="sCount"></span><a class="btn" id="sOpen" target="_blank" rel="noopener">Open original ↗</a><button class="close" type="button" id="sClose" aria-label="Close viewer">Close ×</button></div>
+  </div>
+  <div class="stage-main" id="sMain"></div>
+  <button class="stage-nav prev" type="button" id="sPrev" aria-label="Previous">‹</button>
+  <button class="stage-nav next" type="button" id="sNext" aria-label="Next">›</button>
+  <div class="stage-strip" id="sStrip"></div>
+</div>
 
 <div class="toast" id="toast" role="status"></div>
 
@@ -321,6 +400,28 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
 (() => {
   const $ = s => document.querySelector(s);
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Supabase: where launched projects and their files live ----------
+     Fill these two in from Supabase → Project Settings → API. The publishable/anon key is meant to be public;
+     what it may do is limited by the rules in supabase/setup.sql. Leave them empty to run on projects.json only. */
+  const SUPABASE_URL = 'https://haompsnupbschtplqooi.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_WeRkR3qSvHqwpsbdk2SxJA_ixMMnTkg';
+  const REMOTE = !!(SUPABASE_URL && SUPABASE_KEY);
+  const supa = (() => {
+    const base = SUPABASE_URL.replace(/\/+$/,'');
+    // legacy anon keys are JWTs and also go in Authorization; new publishable keys go in apikey only
+    const auth = () => ({ apikey: SUPABASE_KEY, ...(SUPABASE_KEY.startsWith('eyJ') ? {Authorization: 'Bearer ' + SUPABASE_KEY} : {}) });
+    const fail = async res => { let m = ''; try{ const j = await res.json(); m = j.message || j.error || ''; }catch(e){} const err = new Error(m || res.statusText); err.status = res.status; throw err; };
+    return {
+      publicUrl: path => `${base}/storage/v1/object/public/projects/${path.split('/').map(encodeURIComponent).join('/')}`,
+      async list(){ const res = await fetch(`${base}/rest/v1/projects?select=*&order=created_at.asc`, {headers: auth()}); if(!res.ok) await fail(res); return res.json(); },
+      async insert(row){ const res = await fetch(`${base}/rest/v1/projects`, {method:'POST', headers:{...auth(), 'Content-Type':'application/json', Prefer:'return=representation'}, body: JSON.stringify(row)});
+        if(!res.ok) await fail(res); return (await res.json())[0]; },
+      async upload(path, blob, type){ const res = await fetch(`${base}/storage/v1/object/projects/${path.split('/').map(encodeURIComponent).join('/')}`,
+        {method:'POST', headers:{...auth(), 'Content-Type': type || 'application/octet-stream', 'x-upsert':'false', 'cache-control':'31536000'}, body: blob});
+        if(!res.ok) await fail(res); }
+    };
+  })();
 
   /* ---------- state ---------- */
   let projects = [];
@@ -520,6 +621,8 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
 
   /* ---------- bodies ---------- */
   function enrich(id, d){
+    if(Array.isArray(d.files)) d = {...d, files: d.files.map(f => f && (f.url || !f.path) ? f : {...f, url: supa.publicUrl(f.path)})};
+    if(!d.image && Array.isArray(d.files)){ const im = d.files.find(f => f && /^image\//.test(f.type||'')); if(im) d = {...d, image: im.url}; }
     const r = rng(hash(id));
     const pos = d.pos && typeof d.pos.x==='number' ? d.pos : {x:(r()-.5)*SPACE,y:(r()-.5)*SPACE*.35,z:(r()-.5)*SPACE};
     const fib = []; const n = 50 + ((r()*60)|0);
@@ -575,7 +678,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   const keys = {};
   const inEl = (t, sel) => t instanceof Element && !!t.closest(sel);
   addEventListener('keydown', e => { if(inEl(e.target, 'input,textarea,select')) { if(e.key==='Escape') closeAll(); return; }
-    keys[e.key.toLowerCase()] = true; if(e.key===' '){ e.preventDefault(); setDrift(!drift); } if(e.key==='Escape'){ closeAll(); setIdx(false); } });
+    if(stage) return; keys[e.key.toLowerCase()] = true; if(e.key===' '){ e.preventDefault(); setDrift(!drift); } if(e.key==='Escape'){ closeAll(); setIdx(false); } });
   addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
   addEventListener('blur', () => { for(const k in keys) keys[k] = false; });
   /* drift steering: arrows / A D turn and tilt, W S change speed. Holding any of them takes over from auto-drift;
@@ -584,7 +687,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   const tapAt = {};   // a tap shorter than a frame still counts as holding the key for a moment
   addEventListener('keydown', e => { const k = e.key.toLowerCase(); if(STEER.includes(k)) tapAt[k] = performance.now(); });
   const held = k => keys[k] || performance.now() - (tapAt[k] || -1e9) < 140;
-  const steering = () => !document.querySelector('.panel.open') && STEER.some(held);
+  const steering = () => !stage && !document.querySelector('.panel.open') && STEER.some(held);
   let manualT = 0, autoAmt = 1, yawV = 0, pitchV = 0;
   addEventListener('keydown', e => { if(drift && e.key.startsWith('Arrow') && !inEl(e.target, 'input,textarea,select,.panel,.majors')) e.preventDefault(); });
   function pick(mx,my){ let best=null, bd=1e9; for(const s of lastScreen){ const d=Math.hypot(mx-s.x,my-s.y); if(d < Math.max(14,s.r*1.3) && s.z < bd){ best=s.p; bd=s.z; } } return best; }
@@ -876,6 +979,127 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
     if(exs.length) mt.append(el('p',{class:'note'}, `// ${exs.length} example projects are placeholders.`));
   }
 
+  /* ---------- full-screen viewer ----------
+     Every file of a project becomes one item (image, video, sound, PDF, 3D model), plus the project's link.
+     Example projects without files show their generated preview. */
+  function viewItems(p){
+    const out = [];
+    for(const f of (p.files || [])){ const url = f.url; if(!url) continue; const kind = f.kind || fileKind(f.type||'', url); if(kind) out.push({kind, url, name: f.name || ''}); }
+    if(!out.length && p.image) out.push({kind:'image', url:p.image});
+    if(!out.length && p.video) out.push({kind:'video', url:p.video});
+    if(p.link && /^https?:\/\//i.test(p.link)) out.push({kind:'link', url:p.link});
+    if(!out.some(x => x.kind!=='link')) out.unshift({kind:'preview'});
+    return out;
+  }
+  const KLAB = {image:'Image', video:'Video', audio:'Sound', pdf:'PDF', model:'3D', link:'Link', preview:'Preview'};
+  let stage = null;   // {p, items, i, cleanup}
+  function openStage(p, i){
+    stage = {p, items: viewItems(p), i: 0, cleanup: null};
+    $('#sTitle').textContent = p.title || 'Untitled';
+    $('#sSub').textContent = [p.maker, p.programme, p.year].filter(Boolean).join('  ·  ');
+    const strip = $('#sStrip'); strip.replaceChildren();
+    stage.items.forEach((it, k) => { const b = el('button',{type:'button','aria-label':KLAB[it.kind] + ' ' + (k+1)});
+      if(it.kind==='image'){ const im = el('img',{alt:'',loading:'lazy'}); im.src = it.url; b.append(im); }
+      else if(it.kind==='preview'){ const im = el('img',{alt:''}); im.src = p.thumb.toDataURL('image/png'); b.append(im); }
+      else b.textContent = KLAB[it.kind];
+      b.onclick = () => showItem(k); strip.append(b); });
+    $('#stage').hidden = false; document.body.classList.add('staging');
+    showItem(i || 0); $('#sClose').focus({preventScroll:true});
+  }
+  function closeStage(){ if(!stage) return; if(stage.cleanup) stage.cleanup(); stage = null; $('#sMain').replaceChildren(); $('#stage').hidden = true; document.body.classList.remove('staging'); cv.focus({preventScroll:true}); }
+  $('#sClose').onclick = closeStage;
+  $('#sPrev').onclick = () => stage && showItem((stage.i - 1 + stage.items.length) % stage.items.length);
+  $('#sNext').onclick = () => stage && showItem((stage.i + 1) % stage.items.length);
+  addEventListener('keydown', e => { if(!stage) return;
+    if(e.key==='Escape'){ e.stopImmediatePropagation(); closeStage(); }
+    else if(e.key==='ArrowRight' && !inEl(e.target, 'model-viewer')) $('#sNext').click();
+    else if(e.key==='ArrowLeft' && !inEl(e.target, 'model-viewer')) $('#sPrev').click(); }, true);
+  function showItem(k){
+    if(stage.cleanup){ stage.cleanup(); stage.cleanup = null; }
+    stage.i = k; const it = stage.items[k], m = $('#sMain'); m.replaceChildren();
+    [...$('#sStrip').children].forEach((b, j) => b.setAttribute('aria-current', String(j===k)));
+    $('#sStrip').children[k]?.scrollIntoView({block:'nearest', inline:'center'});
+    const many = stage.items.length > 1; $('#sPrev').hidden = !many; $('#sNext').hidden = !many;
+    $('#sCount').textContent = many ? `${KLAB[it.kind]} · ${k+1} / ${stage.items.length}` : KLAB[it.kind];
+    const open = $('#sOpen'); if(it.url){ open.href = it.url; open.hidden = false; } else open.hidden = true;
+    const view = {image: zoomView, video: videoView, audio: soundView, pdf: pdfView, model: modelView, link: linkView, preview: previewView}[it.kind];
+    stage.cleanup = view(m, it, stage.p) || null;
+  }
+  function zoomView(m, it){
+    const box = el('div',{class:'zoom'}), img = el('img',{alt:'',draggable:'false'}); img.src = it.url; box.append(img);
+    const hint = el('span',{class:'lab zoom-hint'}, matchMedia('(pointer:coarse)').matches ? 'Pinch to zoom · double-tap to reset' : 'Scroll or double-click to zoom · drag to pan'); box.append(hint);
+    m.append(box);
+    let s = 1, x = 0, y = 0, base = null; const ptr = new Map(); let pinch = null, dragP = null;
+    const fit = () => { const r = box.getBoundingClientRect(), w = img.naturalWidth || 1, h = img.naturalHeight || 1;
+      const k = Math.min(r.width/w, r.height/h, 1); base = {w: w*k, h: h*k, ox: (r.width - w*k)/2, oy: (r.height - h*k)/2};
+      img.style.cssText = `position:absolute;left:0;top:0;width:${base.w}px;height:${base.h}px;max-width:none;max-height:none`; };
+    const clamp = () => { const r = box.getBoundingClientRect(); const w = base.w*s, h = base.h*s;
+      const minX = Math.min(0, r.width - w - base.ox), maxX = Math.max(0, -base.ox); const minY = Math.min(0, r.height - h - base.oy), maxY = Math.max(0, -base.oy);
+      if(w <= r.width) x = (r.width - w)/2 - base.ox; else x = Math.max(minX, Math.min(maxX, x));
+      if(h <= r.height) y = (r.height - h)/2 - base.oy; else y = Math.max(minY, Math.min(maxY, y)); };
+    const apply = (anim) => { if(!base) return; clamp(); img.style.transition = anim && !reduce ? 'transform .25s ease' : 'none';
+      img.style.transform = `translate(${base.ox + x}px,${base.oy + y}px) scale(${s})`; box.classList.toggle('zoomed', s > 1.01); hint.style.opacity = s > 1.01 ? 0 : .8; };
+    const zoomAt = (ns, cxp, cyp, anim) => { const r = box.getBoundingClientRect(); ns = Math.max(1, Math.min(6, ns));
+      const px = cxp - r.left - base.ox, py = cyp - r.top - base.oy; x = px - (px - x) * ns/s; y = py - (py - y) * ns/s; s = ns; apply(anim); };
+    const ready = () => { fit(); apply(); }; if(img.complete && img.naturalWidth) ready(); else img.onload = ready;
+    const onResize = () => { if(base){ fit(); apply(); } }; addEventListener('resize', onResize);
+    box.addEventListener('wheel', e => { e.preventDefault(); if(!base) return; zoomAt(s * Math.exp(-e.deltaY*0.0022), e.clientX, e.clientY); }, {passive:false});
+    box.addEventListener('dblclick', e => { if(!base) return; s > 1.01 ? (s = 1, x = 0, y = 0, apply(true)) : zoomAt(2.5, e.clientX, e.clientY, true); });
+    box.addEventListener('pointerdown', e => { box.setPointerCapture(e.pointerId); ptr.set(e.pointerId, {x:e.clientX, y:e.clientY});
+      if(ptr.size===2){ const [a,b] = [...ptr.values()]; pinch = {d: Math.hypot(a.x-b.x, a.y-b.y), s}; dragP = null; }
+      else if(s > 1.01) { dragP = {x:e.clientX, y:e.clientY, ox:x, oy:y}; box.classList.add('dragging'); } });
+    box.addEventListener('pointermove', e => { if(!ptr.has(e.pointerId)) return; ptr.set(e.pointerId, {x:e.clientX, y:e.clientY});
+      if(pinch && ptr.size===2){ const [a,b] = [...ptr.values()]; zoomAt(pinch.s * Math.hypot(a.x-b.x, a.y-b.y)/pinch.d, (a.x+b.x)/2, (a.y+b.y)/2); return; }
+      if(dragP){ x = dragP.ox + e.clientX - dragP.x; y = dragP.oy + e.clientY - dragP.y; apply(); } });
+    const up = e => { ptr.delete(e.pointerId); if(ptr.size < 2) pinch = null; if(!ptr.size){ dragP = null; box.classList.remove('dragging'); } };
+    box.addEventListener('pointerup', up); box.addEventListener('pointercancel', up);
+    let lastTap = 0; box.addEventListener('pointerup', e => { if(e.pointerType!=='touch') return; const t = performance.now();
+      if(t - lastTap < 300){ s > 1.01 ? (s = 1, x = 0, y = 0, apply(true)) : zoomAt(2.5, e.clientX, e.clientY, true); lastTap = 0; } else lastTap = t; });
+    return () => removeEventListener('resize', onResize);
+  }
+  function videoView(m, it){ const v = el('video',{controls:'',playsinline:'',autoplay:'',preload:'auto'}); v.src = it.url; m.append(v); return () => { v.pause(); v.removeAttribute('src'); v.load(); }; }
+  function soundView(m, it, p){
+    const wrap = el('div',{class:'sound'}), c = el('canvas'), au = el('audio',{preload:'auto',crossorigin:'anonymous'}); au.src = it.url;
+    const play = el('button',{class:'play',type:'button','aria-label':'Play'}, '▶'), time = el('span',{}, '0:00 / 0:00'), row = el('div',{class:'row-s'});
+    row.append(play, time); wrap.append(c, row, el('span',{class:'lab'}, it.name || p.title || '')); m.append(wrap);
+    let peaks = null, raf = 0; const col = bubbleCss(progName(p));
+    const fmt = t => isFinite(t) ? `${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}` : '0:00';
+    const draw = () => { const r = c.getBoundingClientRect(), d = Math.min(2, devicePixelRatio||1); c.width = r.width*d; c.height = r.height*d; const g = c.getContext('2d'); g.scale(d,d);
+      const n = Math.max(40, Math.floor(r.width/4)), pr = au.duration ? au.currentTime/au.duration : 0;
+      for(let i=0;i<n;i++){ const v = peaks ? peaks[Math.floor(i/n*peaks.length)] : .08 + .04*Math.sin(i*.7);
+        const h = Math.max(2, v * r.height*.95); g.fillStyle = i/n < pr ? '#F4F4F2' : 'rgba(244,244,242,.28)'; g.fillRect(i*4, (r.height-h)/2, 2, h); }
+      time.textContent = `${fmt(au.currentTime)} / ${fmt(au.duration)}`; };
+    const loop = () => { draw(); raf = au.paused ? 0 : requestAnimationFrame(loop); };
+    au.onloadedmetadata = draw; au.onplay = () => { play.textContent = '❚❚'; play.setAttribute('aria-label','Pause'); if(!raf) loop(); };
+    au.onpause = au.onended = () => { play.textContent = '▶'; play.setAttribute('aria-label','Play'); draw(); };
+    play.onclick = () => au.paused ? au.play() : au.pause();
+    c.onclick = e => { if(!au.duration) return; const r = c.getBoundingClientRect(); au.currentTime = (e.clientX - r.left)/r.width * au.duration; draw(); };
+    fetch(it.url).then(r => r.arrayBuffer()).then(buf => new (window.AudioContext||window.webkitAudioContext)().decodeAudioData(buf)).then(ab => {
+      const ch = ab.getChannelData(0), N = 600, step = Math.floor(ch.length/N) || 1, out = new Float32Array(N); let mx = 0;
+      for(let i=0;i<N;i++){ let v = 0; for(let j=i*step; j<Math.min(ch.length,(i+1)*step); j+=8) v = Math.max(v, Math.abs(ch[j])); out[i] = v; mx = Math.max(mx, v); }
+      peaks = out.map(v => v/(mx||1)); draw(); }).catch(() => {});
+    const onR = () => draw(); addEventListener('resize', onR); requestAnimationFrame(draw);
+    return () => { au.pause(); cancelAnimationFrame(raf); removeEventListener('resize', onR); };
+  }
+  function pdfView(m, it){ const w = el('div',{class:'frame-wrap'}), fr = el('iframe',{title:'PDF'}); fr.src = it.url + '#view=FitH'; w.append(fr, el('p',{class:'note'}, 'If the PDF does not show here, use Open original.')); m.append(w); }
+  function linkView(m, it){ const w = el('div',{class:'frame-wrap'}), fr = el('iframe',{title:'Project link',sandbox:'allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock',allow:'fullscreen; autoplay; xr-spatial-tracking',referrerpolicy:'no-referrer'});
+    fr.src = it.url; w.append(fr, el('p',{class:'note'}, 'Some sites refuse to be shown inside another page. If this stays blank, use Open original.')); m.append(w); }
+  function previewView(m, it, p){ const w = el('div',{class:'stage-empty'}), im = el('img',{class:'preview-big',alt:(p.media||'Project') + ' preview'}); im.src = p.thumb.toDataURL('image/png');
+    w.append(im); if(p.description) w.append(el('p',{class:'p-desc'}, p.description)); m.append(w); }
+  let mvLoading = null;
+  function modelView(m, it){
+    const box = el('div',{class:'lab'}, 'Loading 3D viewer…'); m.append(box);
+    if(!mvLoading) mvLoading = new Promise((res, rej) => { const sc = document.createElement('script'); sc.type = 'module';
+      sc.src = 'https://cdn.jsdelivr.net/npm/@google/model-viewer@3.4.0/dist/model-viewer.min.js'; sc.onload = res; sc.onerror = rej; document.head.append(sc); });
+    let alive = true;
+    mvLoading.then(() => customElements.whenDefined('model-viewer')).then(() => { if(!alive) return;
+      const mv = document.createElement('model-viewer'); mv.setAttribute('src', it.url); mv.setAttribute('camera-controls',''); mv.setAttribute('auto-rotate','');
+      mv.setAttribute('shadow-intensity','1'); mv.setAttribute('exposure','1.05'); mv.setAttribute('environment-image','neutral'); mv.setAttribute('touch-action','none');
+      mv.setAttribute('interaction-prompt','auto'); mv.setAttribute('alt','3D model, drag to rotate'); m.replaceChildren(mv); })
+      .catch(() => { box.textContent = 'The 3D viewer could not load. Use Open original to download the model.'; });
+    return () => { alive = false; };
+  }
+
   /* ---------- related projects ----------
      Score = shared tags (rarer tags count more) + TF-IDF cosine similarity of title and description
      + small bonuses for the same medium or major. Runs in the browser, no server needed. */
@@ -929,11 +1153,11 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
     $('#detail').style.setProperty('--orb', bubbleCss(g));
     $('#dCoord').textContent = coord(p);
     const b = $('#dBody'); b.replaceChildren();
-    if(p.assetId && /^video\//.test(p.assetType||'')){ const v = el('video',{class:'p-img',controls:'',playsinline:'',preload:'metadata'}); v.src='/_blob/'+p.assetId; b.append(v); }
-    else if(p.assetId && isImg(p)){ const im = el('img',{class:'p-img',alt:p.title||'Project image'}); im.src='/_blob/'+p.assetId; b.append(im); }
-    else if(p.video){ const v = el('video',{class:'p-img',controls:'',playsinline:'',preload:'metadata'}); v.src=p.video; b.append(v); }
-    else if(p.image){ const im = el('img',{class:'p-img',alt:p.title||'Project image'}); im.src=p.image; b.append(im); }
-    else { const im = el('img',{class:'p-img',alt:(p.media||'Project')+' preview'}); im.src = p.thumb.toDataURL('image/png'); b.append(im); }
+    const its = viewItems(p), hero = el('button',{class:'p-hero',type:'button','aria-label':'Open '+(p.title||'project')+' full screen'});
+    hero.dataset.count = its.length > 1 ? `View · ${its.length} items` : 'View full screen';
+    if(p.video && !p.image){ const vd = el('video',{class:'p-img',muted:'',playsinline:'',preload:'metadata'}); vd.src = p.video + '#t=0.5'; hero.append(vd); }
+    else { const im = el('img',{class:'p-img',alt:p.title||'Project image'}); im.src = p.image || p.thumb.toDataURL('image/png'); hero.append(im); }
+    hero.onclick = () => openStage(p, 0); b.append(hero);
     const tg = el('div',{class:'tags'});
     if(p.media) tg.append(tagEl(p.media, medHex(p.media)));
     tg.append(tagEl(g, bubbleCss(g), true));
@@ -953,8 +1177,9 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
         ht.append(x); }
       b.append(ht); }
     const acts = el('div',{class:'p-actions'});
+    const vb = el('button',{class:'btn solid',type:'button'}, 'Open full view'); vb.onclick = () => openStage(p, 0); acts.append(vb);
     if(p.assetId && !isImg(p) && !/^video\//.test(p.assetType||'')) acts.append(el('a',{class:'btn solid',href:'/_blob/'+p.assetId,target:'_blank',rel:'noopener'},'Open file'));
-    if(p.link && /^https?:\/\//i.test(p.link)) acts.append(el('a',{class:'btn'+(acts.children.length?'':' solid'),href:p.link,target:'_blank',rel:'noopener'},'Open link'));
+    if(p.link && /^https?:\/\//i.test(p.link)) acts.append(el('a',{class:'btn',href:p.link,target:'_blank',rel:'noopener'},'Open link ↗'));
     const mine = (myId && p.createdBy === myId) || canEditAll;
     if(mine && db){ const del = el('button',{class:'btn warn',type:'button'},'Remove from orbit');
       del.onclick = async () => { if(del.dataset.armed!=='1'){ del.dataset.armed='1'; del.textContent='Click again to remove'; return; }
@@ -988,8 +1213,7 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
   let toastT; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600); }
 
   /* ---------- upload ---------- */
-  let pickedBlob = null;
-  function openUpload(){ if(!db && !staticMode){ toast('Archive still loading'); return; }
+  function openUpload(){
     $('#fErr').textContent=''; renderTagPicker(); openPanel('upload'); setTimeout(()=>$('#fTitle').focus(), 300); }
   $('#addBtn').onclick = openUpload;
   const pickedTags = new Set(); const MAXT = 6;
@@ -1007,13 +1231,52 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
     if(!pickedTags.has(t) && pickedTags.size >= MAXT){ toast('Up to ' + MAXT + ' tags'); return; }
     pickedTags.add(t); e.target.value = ''; renderTagPicker(); });
   const takeTyped = () => { const t = normTag($('#fTag').value); if(t && pickedTags.size < MAXT) pickedTags.add(t); $('#fTag').value=''; };
+  /* picked files for a launch: images are shrunk to 2400px JPEGs, everything else is sent as-is */
+  const MAXF = 8, MAXB = 50*1024*1024;
+  let picked = [];   // {file, type, name, url}
+  const fileKind = (type, name='') => /^image\//.test(type) ? 'image' : /^video\//.test(type) ? 'video' : /^audio\//.test(type) ? 'audio'
+    : type==='application/pdf' ? 'pdf' : (type==='model/gltf-binary' || /\.glb$/i.test(name)) ? 'model' : null;
   const drop = $('#drop'), fileIn = $('#file');
   drop.onclick = () => fileIn.click();
   drop.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); fileIn.click(); } };
   drop.ondragover = e => { e.preventDefault(); drop.classList.add('hot'); };
   drop.ondragleave = () => drop.classList.remove('hot');
-  drop.ondrop = e => { e.preventDefault(); drop.classList.remove('hot'); if(e.dataTransfer.files[0]) takeFile(e.dataTransfer.files[0]); };
-  fileIn.onchange = () => { if(fileIn.files[0]) takeFile(fileIn.files[0]); };
+  drop.ondrop = e => { e.preventDefault(); drop.classList.remove('hot'); takeFiles(e.dataTransfer.files); };
+  fileIn.onchange = () => { takeFiles(fileIn.files); fileIn.value = ''; };
+  const fmtSize = n => n > 1048576 ? (n/1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n/1024)) + ' KB';
+  function renderPicked(){
+    const ul = $('#flist'); ul.replaceChildren();
+    picked.forEach((it, i) => { const li = el('li');
+      if(it.kind==='image'){ const im = el('img',{alt:''}); im.src = it.url; li.append(im); } else li.append(el('span',{class:'ficon'}, it.kind==='model' ? '3D' : it.kind));
+      const nm = el('span'); nm.append(document.createTextNode(it.name), el('small',{}, fmtSize(it.file.size)));
+      const x = el('button',{type:'button','aria-label':'Remove '+it.name}, '×'); x.onclick = () => { URL.revokeObjectURL(it.url); picked.splice(i,1); renderPicked(); };
+      li.append(nm, x); ul.append(li); });
+    $('#dropText').textContent = picked.length ? `${picked.length} of ${MAXF} files · add more` : 'Drop files here, or click to choose';
+  }
+  async function takeFiles(list){
+    $('#fErr').textContent = '';
+    for(const f of [...list]){
+      if(picked.length >= MAXF){ $('#fErr').textContent = `Up to ${MAXF} files per project.`; break; }
+      let type = f.type || (/\.glb$/i.test(f.name) ? 'model/gltf-binary' : '');
+      const kind = fileKind(type, f.name);
+      if(!kind){ $('#fErr').textContent = `${f.name} can't be stored here. Upload images, video, sound, a PDF or a .glb 3D model.`; continue; }
+      if(f.type==='model/gltf' || /\.gltf$/i.test(f.name)){ $('#fErr').textContent = 'Export the 3D model as a single .glb file.'; continue; }
+      let file = f;
+      if(kind==='image' && !/^image\/(gif|svg\+xml)$/.test(type)){
+        // decode it: anything the browser can't draw (DXF, PSD, RAW…) is not an image we can show
+        let bmp = null; try{ bmp = await createImageBitmap(f); }catch(e){}
+        if(!bmp){ $('#fErr').textContent = `${f.name} can't be shown in a browser. Export it as a JPG, PNG or PDF.`; continue; }
+        const k = Math.min(1, 2400/Math.max(bmp.width,bmp.height));
+        const c = document.createElement('canvas'); c.width=Math.round(bmp.width*k); c.height=Math.round(bmp.height*k); c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
+        const blob = await new Promise(r=>c.toBlob(r,'image/jpeg',.88));
+        const webOk = /^image\/(jpeg|png|webp|avif)$/.test(type);
+        if(blob && (!webOk || blob.size < f.size)){ file = blob; type = 'image/jpeg'; } }
+      if(file.size > MAXB){ $('#fErr').textContent = `${f.name} is ${fmtSize(file.size)}. Each file has to be under 50 MB.`; continue; }
+      picked.push({file, type, kind, name: f.name, url: URL.createObjectURL(file)});
+      if(picked.length===1){ const m = {video:'Video', audio:'Sound', model:'3D model', image:'Image'}[kind]; if(m) $('#fMedia').value = m; }
+    }
+    renderPicked();
+  }
   function showEntry(entry, hasImg){
     const text = JSON.stringify(entry, null, 2);
     const box = el('div',{style:'display:grid;gap:10px'});
@@ -1024,80 +1287,67 @@ button.tag[aria-pressed="true"]{opacity:1;border-color:var(--fg);color:var(--fg)
     box.append(pre, copy);
     const old = $('#entryBox'); if(old) old.remove(); box.id='entryBox'; $('#form').append(box); box.scrollIntoView({behavior:'smooth'});
   }
-  const resetDrop = () => { $('#dropPrev').hidden = true; $('#dropText').innerHTML = 'Drop a file here, or click to choose<br>Image, video or PDF · up to 20 MB'; };
-  async function takeFile(f){
-    const okType = /^(image|video)\//.test(f.type) || f.type==='application/pdf';
-    if(!okType){ $('#fErr').textContent = 'That file type can not be stored here. For DXF, 3D or code, upload a render, screenshot or PDF and pick the medium.'; return; }
-    $('#fErr').textContent = '';
-    if(!f.type.startsWith('image/')){ pickedBlob = f; $('#dropPrev').hidden = true; $('#dropText').textContent = f.name + ' · click to replace'; if(f.type.startsWith('video/')) $('#fMedia').value='Video'; return; }
-    try{
-      if(f.type==='image/gif' || f.type==='image/svg+xml') pickedBlob = f;
-      else { const bmp = await createImageBitmap(f); const s = Math.min(1, 1600/Math.max(bmp.width,bmp.height));
-        const c = document.createElement('canvas'); c.width=Math.round(bmp.width*s); c.height=Math.round(bmp.height*s); c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
-        pickedBlob = await new Promise(r=>c.toBlob(r,'image/jpeg',.86)) || f; }
-      const pv = $('#dropPrev'); pv.src = URL.createObjectURL(pickedBlob); pv.hidden = false; $('#dropText').textContent = 'Click to replace the image';
-    }catch(e){ pickedBlob = f; }
-  }
   $('#form').addEventListener('submit', async e => {
     e.preventDefault();
     const v = id => $(id).value.trim();
     const title = v('#fTitle'), maker = v('#fMaker');
     if(!title || !maker){ $('#fErr').textContent = 'Add a project title and who made it.'; (title?$('#fMaker'):$('#fTitle')).focus(); return; }
     const link = v('#fLink'); if(link && !/^https?:\/\//i.test(link)){ $('#fErr').textContent = 'The link needs to start with https://'; $('#fLink').focus(); return; }
+    const year = v('#fYear'); if(year && !/^\d{4}$/.test(year)){ $('#fErr').textContent = 'Year should be four digits, like 2026.'; $('#fYear').focus(); return; }
     takeTyped(); const tags = [...pickedTags];
-    if(staticMode){
+    const base = { title, maker, year, programme:v('#fProg'), media:$('#fMedia').value, tags, description:v('#fDesc'), link };
+    if(!REMOTE){
       const slug = title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40) || 'project';
-      const entry = { id: slug + '-' + Date.now().toString(36), title, maker, year:v('#fYear'), programme:v('#fProg'), media:$('#fMedia').value, tags,
-        description:v('#fDesc'), link, image: pickedBlob ? 'images/' + slug + '.jpg' : '', createdAt: Date.now() };
-      showEntry(entry, !!pickedBlob); return;
+      const img = picked.find(x=>x.kind==='image');
+      showEntry({ id: slug + '-' + Date.now().toString(36), ...base, image: img ? 'images/' + slug + '.jpg' : '', createdAt: Date.now() }, !!img); return;
     }
-    const btn = $('#fSubmit'); btn.disabled = true; btn.textContent = 'Launching…'; $('#fErr').textContent='';
+    const btn = $('#fSubmit'); btn.disabled = true; $('#fErr').textContent='';
     try{
-      let assetId = null, assetType = null;
-      if(pickedBlob){ if(!assets) throw {code:'no_assets'}; const up = await assets.upload(pickedBlob); assetId = up.id; assetType = up.contentType || pickedBlob.type || null; }
-      const pos = {x:(Math.random()-.5)*SPACE, y:(Math.random()-.5)*SPACE*.35, z:(Math.random()-.5)*SPACE};
-      const ref = await db.collection('projects').add({ title, maker, year:v('#fYear'), programme:v('#fProg'), media:$('#fMedia').value, assetType, tags,
-        description:v('#fDesc'), link, assetId, pos, createdBy: myId||null, createdAt: Date.now() });
-      $('#form').reset(); pickedBlob = null; resetDrop(); pickedTags.clear();
+      const folder = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
+      const files = [];
+      for(let i=0;i<picked.length;i++){ const it = picked[i];
+        btn.textContent = `Uploading ${i+1} of ${picked.length}…`;
+        const safe = it.name.toLowerCase().replace(/\.[^.]+$/,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40) || 'file';
+        const ext = it.type==='image/jpeg' ? 'jpg' : (it.name.match(/\.([a-z0-9]{1,5})$/i)||[,'bin'])[1].toLowerCase();
+        const path = `${folder}/${i+1}-${safe}.${ext}`;
+        await supa.upload(path, it.file, it.type);
+        files.push({path, type: it.type, name: it.name}); }
+      btn.textContent = 'Launching…';
+      const row = await supa.insert({...base, files});
+      const p = enrich(row.id, fromRow(row)); projects = [...projects, p];
+      picked.forEach(it=>URL.revokeObjectURL(it.url)); picked = []; renderPicked();
+      $('#form').reset(); pickedTags.clear(); renderMajors();
       closeAll(); toast('Launched · flying to it');
-      setTimeout(()=>{ const p = projects.find(x=>x.id===ref.id); if(p) openDetail(p); }, 500);
-    }catch(err){ const c = err && err.code;
-      $('#fErr').textContent = c==='no_assets'||c==='not_granted'||c==='not_uploader' ? 'You do not have permission to upload files here. Remove the file or ask the archive owner for edit access.'
-        : c==='too_large' ? 'That file is too large. Use one under 20 MB.' : c==='rate_limited' ? 'Too many uploads at once. Wait a moment and try again.' : 'The launch failed. Check your connection and try again.';
+      setTimeout(()=>openDetail(p), 450);
+    }catch(err){ console.warn(err);
+      $('#fErr').textContent = err.status===413 || /size/i.test(err.message||'') ? 'One of the files is too large. Each has to be under 50 MB.'
+        : /mime|type/i.test(err.message||'') ? 'One of the files is a type the archive does not accept.'
+        : err.status===429 ? 'Too many launches at once. Wait a moment and try again.' : 'The launch failed. Check your connection and try again.';
     }finally{ btn.disabled = false; btn.textContent = 'Launch'; }
   });
 
-  /* ---------- data: projects.json when hosted on its own (e.g. GitHub Pages) ---------- */
-  let staticMode = false;
-  async function loadStatic(){
-    staticMode = true;
-    try{
-      const res = await fetch('projects.json', {cache:'no-store'}); if(!res.ok) throw new Error(res.status);
-      const list = await res.json();
-      projects = list.map((d,i) => enrich(d.id || ('p'+i), d));
-      dataState = 'ready';
-    }catch(e){ dataState = 'error'; }
+  /* ---------- data: example projects from projects.json, plus everything launched through Supabase ---------- */
+  let staticMode = true;
+  function fromRow(r){
+    const files = (Array.isArray(r.files) ? r.files : []).filter(f => f && f.path).map(f => ({...f, url: supa.publicUrl(f.path), kind: fileKind(f.type||'', f.path)}));
+    const img = files.find(f=>f.kind==='image'), vid = files.find(f=>f.kind==='video');
+    return { title:r.title, maker:r.maker, year:r.year||'', programme:r.programme||'', media:r.media||'', tags:r.tags||[], description:r.description||'',
+      link:r.link||'', files, image: img ? img.url : '', video: !img && vid ? vid.url : '', createdAt: Date.parse(r.created_at) || Date.now() };
+  }
+  async function loadAll(){
+    const [stat, live] = await Promise.allSettled([
+      fetch('projects.json', {cache:'no-store'}).then(r => { if(!r.ok) throw new Error(r.status); return r.json(); }),
+      REMOTE ? supa.list() : Promise.resolve([]) ]);
+    const list = [];
+    if(stat.status==='fulfilled') stat.value.forEach((d,i) => list.push(enrich(d.id || ('p'+i), d)));
+    if(live.status==='fulfilled') live.value.forEach(r => list.push(enrich(r.id, fromRow(r))));
+    else console.warn('Could not load launched projects', live.reason);
+    projects = list;
+    dataState = stat.status==='rejected' && live.status==='rejected' ? 'error' : 'ready';
+    if(live.status==='rejected' && REMOTE) toast('Could not load newly launched projects');
     renderEmpty(); renderMajors();
   }
-
-  /* ---------- data ---------- */
-  (async () => {
-    if(!window.claude || !claude.use){ return loadStatic(); }
-    const timer = setTimeout(()=>{ if(dataState==='loading'){ dataState='error'; renderEmpty(); } }, 10000);
-    const [d,a,u] = await Promise.all([claude.use('db'), claude.use('assets'), claude.use('user')]);
-    db = d; assets = a; user = u;
-    if(!db){ clearTimeout(timer); dataState='none'; renderEmpty(); renderMajors(); return; }
-    try{ myId = user ? await user.id() : null; }catch(e){}
-    try{ canEditAll = user ? !!(await user.canEdit()) : false; }catch(e){}
-    db.collection('projects').onSnapshot(snap => {
-      clearTimeout(timer);
-      const old = new Map(projects.map(p=>[p.id,p]));
-      projects = snap.docs.map(doc => { const data = doc.data()||{}; const prev = old.get(doc.id);
-        if(prev && prev.assetId === data.assetId && prev.media === data.media){ Object.assign(prev, data, {pos: prev.pos}); return prev; }
-        return enrich(doc.id, data); });
-      dataState = 'ready'; renderEmpty(); renderMajors();
-    }, () => { clearTimeout(timer); dataState='error'; renderEmpty(); });
-  })();
+  loadAll();
 })();
 </script>
 

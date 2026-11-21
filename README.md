@@ -1,6 +1,6 @@
-# across rca
+# Still in Orbit
 
-A lost archive of RCA student projects inspired by space debris. Projects float in a drifting universe; switch to **Overview** to see every project in orbit around a planet, rotate it and zoom in.
+An archive of lost RCA projects, inspired by space debris. Projects float in a drifting universe; switch to **Overview** to see every project in orbit around a planet, rotate it and zoom in.
 
 ## Files
 
@@ -45,10 +45,29 @@ Each project is one entry in `projects.json`:
 - **image** is optional. Without one, the project gets a generated preview in the style of its medium. For a video, use `"video": "images/film.mp4"` instead.
 - **createdAt** is a timestamp in milliseconds. Projects from the last 7 days are marked as new.
 
-You can also use the **+ Launch** form on the live site: it builds the entry for you and gives you the text to paste into `projects.json`.
-
 The 24 projects already in the file are made-up examples (`"example": true`). Delete them when real work comes in.
 
-## Letting people upload directly
+## Launching projects (anyone, no account)
 
-GitHub Pages only hosts files, so visitors can't save new projects to it. For direct uploads you need a small backend such as Supabase or Firebase to store entries and images.
+Anyone visiting the site can press **+ Launch**, add up to 8 files (images, video, sound, PDF, or a `.glb` 3D model; 50 MB each) and the project appears in orbit for everyone straight away. Launched projects and their files are stored in [Supabase](https://supabase.com) (free plan); the example projects stay in `projects.json`.
+
+### One-time setup
+
+1. Create a free Supabase account and a new project.
+2. In the project, open **SQL Editor → New query**, paste everything from [`supabase/setup.sql`](supabase/setup.sql) and press **Run**. This creates the `projects` table and the `projects` file bucket, and sets the rules: anyone can read and add projects, nobody can edit or delete them except you from the dashboard.
+3. In **Project Settings → API**, copy the **Project URL** and the **publishable** (or `anon`) key, and put them at the top of the script in `index.html`:
+   ```js
+   const SUPABASE_URL = 'https://xxxx.supabase.co';
+   const SUPABASE_KEY = 'sb_publishable_…';
+   ```
+   This key is meant to be public. Never put the `service_role` / secret key in the page.
+
+Until those two values are filled in, **+ Launch** falls back to building a `projects.json` entry for you to paste in.
+
+### Taking a project down
+
+In Supabase, open **Table Editor → projects**, find the row and tick **hidden** (it disappears from the site but is kept), or delete the row. To also remove its files, delete its folder in **Storage → projects** (the folder name is listed in the row's `files` column).
+
+## Viewing a project
+
+Click a project, then its image (or **Open full view**) to open it full screen. Every file gets its own view: images zoom and pan (scroll, double-click, pinch, drag), video plays full size, sound gets a waveform player, PDFs open inline, `.glb` models can be spun and zoomed, and the project's link opens inside the viewer (some sites refuse to be embedded; **Open original** always works). Use the arrows or the strip at the bottom to move between items.
